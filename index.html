@@ -34,10 +34,10 @@
     </div>
     <script>
         function calculatePage() {
+           const startDate = new Date('2024-01-01');  // Start of the year
             const today = new Date();
-            const endOfYear = new Date(today.getFullYear(), 11, 31);
-            const daysLeft = Math.ceil((endOfYear - today) / (1000 * 60 * 60 * 24));
-            return daysLeft;
+            const daysPassed = Math.ceil((today - startDate) / (1000 * 60 * 60 * 24));
+            return daysPassed;
         }
 
         async function fetchDailyQuote() {
