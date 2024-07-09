@@ -20,12 +20,16 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
+        .quote-container p {
+            margin: 10px 0;
+        }
     </style>
 </head>
 <body>
     <div class="quote-container">
         <h1>Daily Islamic Quote</h1>
-        <p id="quote">Loading...</p>
+        <p id="quoteEnglish">Loading...</p>
+        <p id="quoteArabic"></p>
         <p id="source"></p>
     </div>
     <script>
@@ -42,16 +46,24 @@
                 const hadiths = data.hadiths.data || [];
                 if (hadiths.length > 0) {
                     const dailyHadith = hadiths[0];
-                    const quote = dailyHadith.hadithEnglish || 'Quote not available';
-                    const source = dailyHadith.book || 'Source not available';
-                    document.getElementById('quote').textContent = quote;
-                    document.getElementById('source').textContent = `Source: ${source}`;
+                    const quoteEnglish = dailyHadith.hadithEnglish || 'English version not available';
+                    const quoteArabic = dailyHadith.hadithArabic || 'Arabic version not available';
+                    const bookName = dailyHadith.book?.bookName || 'Book name not available';
+                    const writerName = dailyHadith.book?.writerName || 'Writer name not available';
+                    const source = `Source: ${bookName} by ${writerName}`;
+                    document.getElementById('quoteEnglish').textContent = quoteEnglish;
+                    document.getElementById('quoteArabic').textContent = quoteArabic;
+                    document.getElementById('source').textContent = source;
                 } else {
-                    document.getElementById('quote').textContent = 'No hadiths found.';
+                    document.getElementById('quoteEnglish').textContent = 'No hadiths found.';
+                    document.getElementById('quoteArabic').textContent = '';
+                    document.getElementById('source').textContent = '';
                 }
             } catch (error) {
                 console.error('Failed to fetch the hadith:', error);
-                document.getElementById('quote').textContent = 'Failed to fetch the quote.';
+                document.getElementById('quoteEnglish').textContent = 'Failed to fetch the quote.';
+                document.getElementById('quoteArabic').textContent = '';
+                document.getElementById('source').textContent = '';
             }
         }
 
