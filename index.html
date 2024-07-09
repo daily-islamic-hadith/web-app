@@ -39,7 +39,7 @@
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const data = await response.json();
-                const hadiths = data.hadiths || [];
+                const hadiths = data.hadiths.data || [];
                 if (hadiths.length > 0) {
                     const dailyHadith = hadiths[0];
                     const quote = dailyHadith.hadithEnglish || 'Quote not available';
