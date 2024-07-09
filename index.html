@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Islamic Quote</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .quote-container {
+            text-align: center;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="quote-container">
+        <h1>Daily Islamic Quote</h1>
+        <p id="quote">Loading...</p>
+        <p id="source"></p>
+    </div>
+    <script>
+        async function fetchDailyQuote() {
+            const apiKey = '$2y$10$g6DiHQy5wS5mUTkJ9GEOOGusfhUFOCToGxciSAdArTzrLe1wItq';
+            const url = `https://www.hadithapi.com/api/hadiths?apiKey=${apiKey}&status=Sahih&paginate=1`;
+
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                const hadiths = data.hadiths || [];
+                if (hadiths.length > 0) {
+                    const dailyHadith = hadiths[0];
+                    const quote = dailyHadith.hadithEnglish || 'Quote not available';
+                    const source = dailyHadith.book || 'Source not available';
+                    document.getElementById('quote').textContent = quote;
+                    document.getElementById('source').textContent = `Source: ${source}`;
+                } else {
+                    document.getElementById('quote').textContent = 'No hadiths found.';
+                }
+            } catch (error) {
+                console.error('Failed to fetch the hadith:', error);
+                document.getElementById('quote').textContent = 'Failed to fetch the quote.';
+            }
+        }
+
+        fetchDailyQuote();
+    </script>
+</body>
+</html>
