@@ -33,9 +33,17 @@
         <p id="source"></p>
     </div>
     <script>
+        function calculatePage() {
+            const today = new Date();
+            const endOfYear = new Date(today.getFullYear(), 11, 31);
+            const daysLeft = Math.ceil((endOfYear - today) / (1000 * 60 * 60 * 24));
+            return daysLeft;
+        }
+
         async function fetchDailyQuote() {
             const apiKey = '$2y$10$g6DiHQy5wS5mUTkJ9GEOOGusfhUFOCToGxciSAdArTzrLe1wItq';
-            const url = `https://www.hadithapi.com/api/hadiths?apiKey=${apiKey}&status=Sahih&paginate=1`;
+            const page = calculatePage();
+            const url = `https://www.hadithapi.com/api/hadiths?apiKey=${apiKey}&status=Sahih&paginate=1&page=${page}`;
 
             try {
                 const response = await fetch(url);
@@ -71,3 +79,4 @@
     </script>
 </body>
 </html>
+
