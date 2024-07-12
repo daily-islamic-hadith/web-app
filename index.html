@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daily Islamic Quote</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet"> <!-- Add Google Font for Arabic -->
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -21,9 +22,19 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            max-width: 600px; /* Added for better layout */
         }
         .quote-container p {
             margin: 10px 0;
+        }
+        .quote-container p#quoteArabic {
+            font-family: 'Amiri', serif; /* Apply the Arabic font */
+            direction: rtl; /* Right-to-left text direction for Arabic */
+            font-size: 1.2em; /* Increase font size for readability */
+        }
+        .quote-container p#source {
+            color: #757575; /* Set the source text color to a greyish tone */
+            font-style: italic; /* Optional: italicize the source text for emphasis */
         }
         .dns-link {
             position: absolute;
