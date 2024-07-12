@@ -12,6 +12,8 @@
             align-items: center;
             height: 100vh;
             background-color: #f0f0f0;
+            position: relative;  /* Add this to allow positioning of the link */
+            margin: 0;  /* Ensure there is no margin */
         }
         .quote-container {
             text-align: center;
@@ -23,6 +25,11 @@
         .quote-container p {
             margin: 10px 0;
         }
+        .dns-link {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+        }
     </style>
 </head>
 <body>
@@ -32,9 +39,12 @@
         <p id="quoteArabic"></p>
         <p id="source"></p>
     </div>
+    <div class="dns-link">
+        <a href="http://dnsexit.com"><img src="http://dnsexit.com/images/dns2.gif" border="0" alt="DNS Exit"></a>
+    </div>
     <script>
         function calculatePage() {
-           const startDate = new Date('2024-01-01');  // Start of the year
+            const startDate = new Date('2024-01-01');  // Start of the year
             const today = new Date();
             const daysPassed = Math.ceil((today - startDate) / (1000 * 60 * 60 * 24));
             return daysPassed;
@@ -79,4 +89,3 @@
     </script>
 </body>
 </html>
-
