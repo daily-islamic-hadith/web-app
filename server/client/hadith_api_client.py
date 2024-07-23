@@ -1,9 +1,10 @@
 import requests
 import logging
+import os
 
 # Constants
 BASE_ENDPOINT = 'https://www.hadithapi.com/api/hadiths'
-API_KEY = 'YOUR-API-KEY'
+API_KEY = os.getenv('HADITH_API_KEY', 'your-api-key')
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
