@@ -2,6 +2,7 @@ from datetime import datetime
 from flask import Flask, jsonify, current_app
 from client.hadith_api_client import fetch_hadith
 from dao.hadith_dao import Database
+from flask_cors import cross_origin
 import logging
 import os
 
@@ -59,6 +60,7 @@ def index():
 
 
 @app.route('/today-hadith')
+@cross_origin()
 def get_hadith_of_the_day():
     """
     Route to fetch today's hadith.
