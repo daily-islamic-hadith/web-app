@@ -35,10 +35,6 @@
             overflow-y: auto;
         }
 
-        .quote-container p {
-            margin: 10px 0;
-        }
-
         .quote-container p#quoteArabic {
             font-family: 'Amiri', serif;
             direction: rtl;
@@ -54,10 +50,6 @@
             display: none;
         }
 
-        .loading {
-            font-size: 1.2em;
-            color: #757575;
-        }
     </style>
 </head>
 <body>
@@ -72,7 +64,7 @@
     </div>
     <script>
         async function fetchDailyQuote() {
-            const url = `https://daily-islamic-hadith.onrender.com/today-hadith`;
+            const url = `https://marine-diane-daily-hadith-c60e1c0d.koyeb.app/today-hadith`;
 
             try {
                 const response = await fetch(url);
