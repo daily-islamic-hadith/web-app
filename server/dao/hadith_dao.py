@@ -68,6 +68,18 @@ class Database:
         finally:
             self.close_connection()
 
+    def get_total_hadith_count(self):
+        self.connect()
+        try:
+            query = 'SELECT count(*) as total_count FROM hadith_meta;'
+            df = pd.read_sql(query, self.conn)
+            return int(df['total_count'][0])
+        except Exception as e:
+            logger.error(f"Error fetching hadith count: {e}")
+            raise
+        finally:
+            self.close_connection()
+
     def close_connection(self):
         """
         Close the database connection.

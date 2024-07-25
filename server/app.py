@@ -22,6 +22,7 @@ def setup_db():
     """
     db = Database()
     app.config['DB'] = db
+    app.config['total_hadith_count'] = db.get_total_hadith_count()
     logger.info("Database setup completed.")
 
 
@@ -42,7 +43,8 @@ def get_today_hadith_number():
         start_date = datetime.strptime(START_DATE, '%Y-%m-%d')
         today = datetime.today()
         days_passed = (today - start_date).days
-        return days_passed
+        hadith_number = days_passed % current_app.config['total_hadith_count']
+        return hadith_number
     except Exception as e:
         logger.error(f"Error calculating today's hadith number: {e}")
         raise
