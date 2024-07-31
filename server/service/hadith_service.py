@@ -10,11 +10,27 @@ logger = logging.getLogger(__name__)
 
 # Load configuration from environment variables or default values
 START_DATE = os.getenv('START_DATE', '2024-07-12')
+CACHED_HADITH_META = {}
 
 
 def get_today_hadith():
-    hadith_row_number = get_today_hadith_number()
-    hadith_meta = fetch_hadith_meta(hadith_row_number)
+    """
+    Fetch today's hadith.
+
+    This function retrieves the hadith for today's date. It first checks if the metadata for today's
+    hadith is cached. If not, it calculates the hadith row number based on today's date and fetches
+    the metadata from the database. The metadata is then cached for future use. Finally, it fetches
+    the hadith content using the metadata.
+
+    Returns:
+        dict or None: A dictionary containing the hadith content if found, otherwise None.
+    """
+    today = datetime.today().date()
+    hadith_meta = CACHED_HADITH_META.get(today)
+    if hadith_meta is None:
+        hadith_row_number = get_hadith_number(today)
+        hadith_meta = fetch_hadith_meta(hadith_row_number)
+        CACHED_HADITH_META[today] = hadith_meta
     if hadith_meta:
         return fetch_hadith(hadith_meta['Book'], hadith_meta['Chapter'], hadith_meta['HadithNumber'])
     else:
@@ -54,9 +70,9 @@ def fetch_hadith_meta(hadith_row_number):
         raise
 
 
-def get_today_hadith_number():
+def get_hadith_number(target_date):
     """
-    Calculate the hadith number for today based on the start date.
+    Calculate the hadith number for the input date with respect to the start date.
 
     This function calculates the number of days passed since the START_DATE and returns it as
     the hadith number for today after making sure it is less than the total number of hadiths.
@@ -68,12 +84,11 @@ def get_today_hadith_number():
         Exception: If there is an error in calculating the hadith number.
     """
     try:
-        start_date = datetime.strptime(START_DATE, '%Y-%m-%d')
-        today = datetime.today()
-        days_passed = (today - start_date).days
+        start_date = datetime.strptime(START_DATE, '%Y-%m-%d').date()
+        days_passed = (target_date - start_date).days
         db = current_app.config['DB']
         hadith_number = days_passed % db.get_total_hadith_count()
         return hadith_number
     except Exception as e:
-        logger.error(f"Error calculating today's hadith number: {e}")
+        logger.error(f"Error calculating hadith number for date {target_date}: {e}")
         raise
