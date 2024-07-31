@@ -59,6 +59,7 @@ class Database:
         """
         self.connect()
         try:
+            row_number = max(1, row_number)
             query = 'SELECT * FROM hadith_meta WHERE ROWID=?'
             df = pd.read_sql(query, self.conn, params=(row_number,))
             return df
