@@ -76,7 +76,6 @@ def close_db(error):
     db = current_app.config.get('DB')
     if db is not None:
         db.close_connection()
-        logger.info("Database connection closed.")
 
 
 with app.app_context():

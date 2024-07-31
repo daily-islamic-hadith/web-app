@@ -94,6 +94,7 @@ class Database:
         if self.conn:
             try:
                 self.conn.close()
+                logger.info("Database connection closed.")
             except sqlite3.Error as e:
                 logger.error(f"Error closing database connection: {e}")
             finally:
