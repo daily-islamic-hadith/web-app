@@ -4,7 +4,7 @@ import sqlite3
 import logging
 
 # Define a constant for the database url
-DATABASE_URL = os.getenv('database_url', 'sqlite:///db/app.db')
+DATABASE_URL = os.getenv('DATABASE_URL', 'sqlite:///db/app.db')
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
