@@ -57,11 +57,11 @@ def fetch_hadith_meta(hadith_row_number):
     try:
         db = current_app.config['DB']
         result = db.get_hadith_meta(hadith_row_number)
-        if not result.empty:
+        if result:
             return {
-                'Book': result['Book'][0],
-                'Chapter': result['Chapter'][0],
-                'HadithNumber': result['HadithNumber'][0]
+                'Book': result[0][0],
+                'Chapter': result[0][1],
+                'HadithNumber': result[0][2]
             }
         else:
             return None
