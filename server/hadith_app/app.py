@@ -1,5 +1,5 @@
 from flask import current_app
-from . import app
+from hadith_app import app
 
 
 @app.teardown_appcontext

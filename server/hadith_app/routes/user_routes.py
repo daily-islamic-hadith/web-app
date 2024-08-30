@@ -1,7 +1,7 @@
 from flask import jsonify
 from flask_cors import cross_origin
-from .. import app
-from service.hadith_service import get_today_hadith
+from hadith_app import app
+from hadith_app.service.hadith_service import get_today_hadith
 import logging
 
 # Setup logging

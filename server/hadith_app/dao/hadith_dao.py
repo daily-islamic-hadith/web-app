@@ -4,7 +4,7 @@ import sqlite3
 import logging
 
 # Define a constant for the database url
-DATABASE_URL = os.getenv('DATABASE_URL', 'sqlite:///db/app.db')
+DATABASE_URL = os.getenv('DATABASE_URL', 'sqlite:///hadith_app/db/app.db')
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -82,7 +82,7 @@ class Database:
         self.connect()
         try:
             result = self.execute_modify_query("DELETE FROM hadith_meta WHERE book=? and chapter=? and hadithnumber=?;",
-                                        (book, chapter, number,))
+                                               (book, chapter, number,))
             return result
         except Exception as e:
             logger.error(f"Error deleting hadith meta : {e}")

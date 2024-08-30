@@ -1,6 +1,6 @@
 from datetime import datetime
 from flask import current_app
-from client.hadith_api_client import fetch_hadith
+from hadith_app.client.hadith_api_client import fetch_hadith
 import logging
 import os
 
@@ -46,7 +46,6 @@ def delete_today_hadith():
     db = current_app.config['DB']
     delete_count = db.delete_hadith_meta(hadith_meta['Book'], hadith_meta['Chapter'], hadith_meta['HadithNumber'])
     return delete_count is not None and delete_count > 0
-
 
 
 def fetch_hadith_meta(hadith_row_number):
