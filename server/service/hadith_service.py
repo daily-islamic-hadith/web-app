@@ -37,6 +37,18 @@ def get_today_hadith():
         return None
 
 
+def delete_today_hadith():
+    today = datetime.today().date()
+    hadith_meta = CACHED_HADITH_META.pop(today, None)
+    if hadith_meta is None:
+        hadith_row_number = get_hadith_number(today)
+        hadith_meta = fetch_hadith_meta(hadith_row_number)
+    db = current_app.config['DB']
+    delete_count = db.delete_hadith_meta(hadith_meta['Book'], hadith_meta['Chapter'], hadith_meta['HadithNumber'])
+    return delete_count is not None and delete_count > 0
+
+
+
 def fetch_hadith_meta(hadith_row_number):
     """
     Fetch the metadata for a specific hadith from the database.

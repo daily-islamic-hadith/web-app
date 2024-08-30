@@ -46,7 +46,7 @@ class Database:
         """
         self.connect()
         try:
-            result = self.execute_query("SELECT * FROM hadith_meta limit 1 offset ?;", (row_number,))
+            result = self.execute_read_query("SELECT * FROM hadith_meta limit 1 offset ?;", (row_number,))
             return result
         except Exception as e:
             logger.error(f"Error fetching hadith meta: {e}")
@@ -70,7 +70,7 @@ class Database:
         """
         self.connect()
         try:
-            result = self.execute_query("SELECT count(*) as total_count FROM hadith_meta;")
+            result = self.execute_read_query("SELECT count(*) as total_count FROM hadith_meta;")
             return result[0][0]
         except Exception as e:
             logger.error(f"Error fetching hadith count: {e}")
@@ -78,13 +78,36 @@ class Database:
         finally:
             self.close_connection()
 
-    def execute_query(self, query, params=()):
-        adapted_query = query.replace("?", self.PLACEHOLDER)
-        cursor = self.conn.cursor()
-        cursor.execute(adapted_query, params)
+    def delete_hadith_meta(self, book, chapter, number):
+        self.connect()
+        try:
+            result = self.execute_modify_query("DELETE FROM hadith_meta WHERE book=? and chapter=? and hadithnumber=?;",
+                                        (book, chapter, number,))
+            return result
+        except Exception as e:
+            logger.error(f"Error deleting hadith meta : {e}")
+            raise
+        finally:
+            self.close_connection()
+
+    def execute_read_query(self, query, params=()):
+        cursor = self.execute_query_and_return_cursor(query, params)
         result = cursor.fetchall()
         cursor.close()
         return result
+
+    def execute_modify_query(self, query, params=()):
+        cursor = self.execute_query_and_return_cursor(query, params)
+        result = cursor.rowcount
+        self.conn.commit()
+        cursor.close()
+        return result
+
+    def execute_query_and_return_cursor(self, query, params=()):
+        adapted_query = query.replace("?", self.PLACEHOLDER)
+        cursor = self.conn.cursor()
+        cursor.execute(adapted_query, params)
+        return cursor
 
     def connect(self):
         # Establish a database connection using the appropriate library
