@@ -1,6 +1,6 @@
 from datetime import datetime
-from flask import current_app
 from hadith_app.client.hadith_api_client import fetch_hadith
+from hadith_app.extensions import db
 import logging
 import os
 
@@ -43,7 +43,6 @@ def delete_today_hadith():
     if hadith_meta is None:
         hadith_row_number = get_hadith_number(today)
         hadith_meta = fetch_hadith_meta(hadith_row_number)
-    db = current_app.config['DB']
     delete_count = db.delete_hadith_meta(hadith_meta['Book'], hadith_meta['Chapter'], hadith_meta['HadithNumber'])
     return delete_count is not None and delete_count > 0
 
@@ -66,7 +65,6 @@ def fetch_hadith_meta(hadith_row_number):
         Exception: If there is an error in fetching the hadith metadata.
     """
     try:
-        db = current_app.config['DB']
         result = db.get_hadith_meta(hadith_row_number)
         if result:
             return {
@@ -97,7 +95,6 @@ def get_hadith_number(target_date):
     try:
         start_date = datetime.strptime(START_DATE, '%Y-%m-%d').date()
         days_passed = (target_date - start_date).days
-        db = current_app.config['DB']
         hadith_number = days_passed % db.get_total_hadith_count()
         return hadith_number
     except Exception as e:
