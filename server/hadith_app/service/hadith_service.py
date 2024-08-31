@@ -1,6 +1,6 @@
 from datetime import datetime
 from hadith_app.client.hadith_api_client import fetch_hadith
-from hadith_app.extensions import db
+from hadith_app.dao import hadith_dao
 import logging
 import os
 
@@ -43,7 +43,8 @@ def delete_today_hadith():
     if hadith_meta is None:
         hadith_row_number = get_hadith_number(today)
         hadith_meta = fetch_hadith_meta(hadith_row_number)
-    delete_count = db.delete_hadith_meta(hadith_meta['Book'], hadith_meta['Chapter'], hadith_meta['HadithNumber'])
+    delete_count = hadith_dao.delete_hadith_meta(hadith_meta['Book'], hadith_meta['Chapter'],
+                                                 hadith_meta['HadithNumber'])
     return delete_count is not None and delete_count > 0
 
 
@@ -65,7 +66,7 @@ def fetch_hadith_meta(hadith_row_number):
         Exception: If there is an error in fetching the hadith metadata.
     """
     try:
-        result = db.get_hadith_meta(hadith_row_number)
+        result = hadith_dao.get_hadith_meta(hadith_row_number)
         if result:
             return {
                 'Book': result[0][0],
@@ -95,7 +96,7 @@ def get_hadith_number(target_date):
     try:
         start_date = datetime.strptime(START_DATE, '%Y-%m-%d').date()
         days_passed = (target_date - start_date).days
-        hadith_number = days_passed % db.get_total_hadith_count()
+        hadith_number = days_passed % hadith_dao.get_total_hadith_count()
         return hadith_number
     except Exception as e:
         logger.error(f"Error calculating hadith number for date {target_date}: {e}")
