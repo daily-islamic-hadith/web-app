@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 def get_user_by_username(username):
     db.connect()
     try:
-        result = db.execute_read_query("SELECT * FROM user where username=?;", (username,))
+        result = db.execute_read_query("SELECT * FROM user_auth where username=?;", (username,))
         if result:
             return bind_to_user(result[0])
         else:
