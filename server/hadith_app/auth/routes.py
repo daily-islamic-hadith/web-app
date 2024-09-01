@@ -4,7 +4,7 @@ from flask_jwt_extended import create_access_token
 from flask_principal import identity_changed, Identity
 
 from hadith_app.auth import auth_bp
-from hadith_app.models import User
+from hadith_app.service import user_service
 
 
 @auth_bp.route('/get-token', methods=['POST'])
@@ -12,7 +12,8 @@ from hadith_app.models import User
 def generate_access_token():
     username = request.form.get('username')
     password = request.form.get('password')
-    valid_credentials = User.validate_user_credentials(username, password)
+    # TODO validate request input first
+    valid_credentials = user_service.validate_user_credentials(username, password)
     if valid_credentials:
         access_token = create_access_token(identity={'username': username})
         # Signal identity change (required for flask_principal)
