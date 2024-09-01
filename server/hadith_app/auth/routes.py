@@ -16,7 +16,7 @@ def generate_access_token():
     valid_credentials = user_service.validate_user_credentials(username, password)
     if valid_credentials:
         access_token = create_access_token(identity={'username': username})
-        # Signal identity change (required for flask_principal)
+        # Signal identity change
         identity_changed.send(current_app, identity=Identity(username))
         return jsonify(token=access_token), 200
     else:
