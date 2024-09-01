@@ -3,7 +3,7 @@ import logging
 import os
 
 # Constants
-BASE_ENDPOINT = 'https://www.hadithapi.com/api/hadiths'
+API_URL = os.getenv('HADITH_API_URL', 'client-url')
 API_KEY = os.getenv('HADITH_API_KEY', 'your-api-key')
 
 # Configure logging
@@ -31,7 +31,7 @@ def fetch_hadith(book_name, chapter_number, hadith_number):
     }
     try:
         logger.info(f"Fetching hadith: book={book_name}, chapter={chapter_number}, hadith={hadith_number}")
-        response = requests.get(BASE_ENDPOINT, params=params)
+        response = requests.get(API_URL, params=params)
         response.raise_for_status()  # Raise an error for bad status codes
         hadith_data = response.json()
 
