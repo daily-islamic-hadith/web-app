@@ -7,7 +7,6 @@ daily Hadith from the vast collections of Islamic traditions.
 ## Table of Contents
 
 - [Features](#features)
-- [Project Structure](#project-structure)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Data Sources](#data-sources)
