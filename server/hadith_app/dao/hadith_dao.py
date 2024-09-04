@@ -1,5 +1,6 @@
 import logging
 from hadith_app.extensions import db
+from hadith_app.models import HadithMeta
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -18,7 +19,7 @@ def get_hadith_meta(row_number):
     row_number (int): The row number of the Hadith metadata to fetch.
 
     Returns:
-    result: The metadata of the Hadith at the specified row number.
+    result: The target hadithMeta object.
 
     Raises:
     Exception: If there is an error during the database query execution.
@@ -30,7 +31,10 @@ def get_hadith_meta(row_number):
     db.connect()
     try:
         result = db.execute_read_query("SELECT * FROM hadith_meta limit 1 offset ?;", (row_number,))
-        return result
+        if result:
+            return bind_to_hadith_meta(result[0])
+        else:
+            return None
     except Exception as e:
         logger.error(f"Error fetching hadith meta: {e}")
         raise
@@ -74,3 +78,10 @@ def delete_hadith_meta(book, chapter, number):
         raise
     finally:
         db.close_connection()
+
+
+def bind_to_hadith_meta(db_row_result):
+    if db_row_result:
+        return HadithMeta(db_row_result[0], db_row_result[1], db_row_result[2])
+    else:
+        return None

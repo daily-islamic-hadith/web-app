@@ -4,3 +4,10 @@ class User:
         self.username = username
         self.password = password
         self.roles = roles
+
+
+class HadithMeta:
+    def __init__(self, book, chapter, number):
+        self.book = book
+        self.chapter = chapter
+        self.number = number

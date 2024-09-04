@@ -32,7 +32,7 @@ def get_today_hadith():
         hadith_meta = fetch_hadith_meta(hadith_row_number)
         CACHED_HADITH_META[today] = hadith_meta
     if hadith_meta:
-        return fetch_hadith(hadith_meta['Book'], hadith_meta['Chapter'], hadith_meta['HadithNumber'])
+        return fetch_hadith(hadith_meta.book, hadith_meta.chapter, hadith_meta.number)
     else:
         return None
 
@@ -59,22 +59,14 @@ def fetch_hadith_meta(hadith_row_number):
         hadith_row_number (int): The row number of the hadith to fetch metadata for.
 
     Returns:
-        dict: A dictionary containing the hadith metadata (Book, Chapter, HadithNumber) if found,
+        model: A HadithMeta object containing the hadith metadata if found,
               otherwise None.
 
     Raises:
         Exception: If there is an error in fetching the hadith metadata.
     """
     try:
-        result = hadith_dao.get_hadith_meta(hadith_row_number)
-        if result:
-            return {
-                'Book': result[0][0],
-                'Chapter': result[0][1],
-                'HadithNumber': result[0][2]
-            }
-        else:
-            return None
+        return hadith_dao.get_hadith_meta(hadith_row_number)
     except Exception as e:
         logger.error(f"Error fetching hadith metadata: {e}")
         raise
