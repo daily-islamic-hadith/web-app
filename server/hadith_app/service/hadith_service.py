@@ -43,8 +43,7 @@ def delete_today_hadith():
     if hadith_meta is None:
         hadith_row_number = get_hadith_number(today)
         hadith_meta = fetch_hadith_meta(hadith_row_number)
-    delete_count = hadith_dao.delete_hadith_meta(hadith_meta['Book'], hadith_meta['Chapter'],
-                                                 hadith_meta['HadithNumber'])
+    delete_count = hadith_dao.delete_hadith_meta(hadith_meta.book, hadith_meta.chapter, hadith_meta.number)
     return delete_count is not None and delete_count > 0
 
 
