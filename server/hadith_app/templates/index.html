@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Hadith</title>
+    <meta name="description" content="Get your daily dose of inspiration with a new Hadith every day.">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='icons/icon.png') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- app styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<h1>Hadith Of The Day</h1>
+<div class="quote-container" role="main" aria-live="polite">
+    {% if today_hadith is defined and today_hadith is not none %}
+        <p id="quoteEnglish">{{ today_hadith.hadithEnglish }}</p>
+        <p id="quoteArabic" lang="ar">{{ today_hadith.hadithArabic }}</p>
+        <p id="source">Source: {{ today_hadith.book.bookName }} by {{ today_hadith.book.writerName }}</p>
+    {% else %}
+        <p id="quoteEnglish">{{ error }}</p>
+        <p id="quoteArabic" lang="ar"></p>
+        <p id="source"></p>
+    {% endif %}
+</div>
+{% if today_hadith is defined and today_hadith is not none %}
+    <button id="copyButton" aria-label="Copy Hadith to Clipboard"><i class="fas fa-copy"></i></button>
+    <div id="notification">Hadith copied to clipboard!</div>
+{% endif %}
+<div class="dns-link">
+    <a href="http://dnsexit.com"><img src="http://dnsexit.com/images/dns2.gif" border="0" alt="DNS Exit"></a>
+</div>
+<script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+</body>
+</html>

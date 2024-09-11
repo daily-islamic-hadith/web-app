@@ -21,7 +21,7 @@ def fetch_hadith(book_name, chapter_number, hadith_number):
     - hadith_number (int): The hadith number.
 
     Returns:
-    - dict: The hadith data if found, otherwise an empty dictionary.
+    - dict: The hadith data if found, otherwise None.
     """
     params = {
         'book': book_name,
@@ -40,10 +40,10 @@ def fetch_hadith(book_name, chapter_number, hadith_number):
             return hadith_data['hadiths']['data'][0] if hadith_data['hadiths']['data'] else {}
         else:
             logger.error("Unexpected response structure: %s", hadith_data)
-            return {}
+            return None
     except requests.RequestException as e:
         logger.error(f"Request failed: {e}")
-        return {}
+        return None
     except (KeyError, IndexError) as e:
         logger.error(f"Error parsing response: {e}")
-        return {}
+        return None
