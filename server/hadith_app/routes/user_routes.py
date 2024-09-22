@@ -1,4 +1,4 @@
-from flask import jsonify, render_template
+from flask import jsonify, render_template, send_from_directory
 from flask_cors import cross_origin
 from hadith_app import app
 from hadith_app.service.hadith_service import get_today_hadith
@@ -23,6 +23,11 @@ def index():
         return render_template("index.html", today_hadith=result.get('today_hadith'))
     else:
         return render_template("index.html", error=result.get('error')), result.get('status_code')
+
+
+@app.route('/privacy-policy')
+def privacy():
+    return send_from_directory('static', 'privacy-policy.html')
 
 
 @app.route('/api/today-hadith')
