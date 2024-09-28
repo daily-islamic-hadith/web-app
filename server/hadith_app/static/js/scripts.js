@@ -1,9 +1,23 @@
 document.addEventListener('DOMContentLoaded', () => {
+    detectBrowser();
     const copy_button = document.querySelector('#copyButton');
     if (copy_button) {
         copy_button.addEventListener('click', copyToClipboard);
     }
 });
+
+function detectBrowser() {
+    const userAgent = navigator.userAgent;
+    const isMobileOrTablet = /Mobi|Android|iPhone|iPad|Tablet|Mobile/i.test(userAgent);
+
+    if (!isMobileOrTablet) {
+        if (userAgent.includes("Chrome") && !userAgent.includes("Edg") && !userAgent.includes("OPR")) {
+            document.getElementById('chrome-btn').style.display = 'inline-block';
+        } else if (userAgent.includes("Firefox")) {
+            document.getElementById('firefox-btn').style.display = 'inline-block';
+        }
+    }
+}
 
 async function copyToClipboard() {
     const quoteEnglish = document.getElementById('quoteEnglish').textContent;

@@ -30,9 +30,19 @@
     <button id="copyButton" aria-label="Copy Hadith to Clipboard"><i class="fas fa-copy"></i></button>
     <div id="notification">Hadith copied to clipboard!</div>
 {% endif %}
-<div class="dns-link">
-    <a href="http://dnsexit.com"><img src="http://dnsexit.com/images/dns2.gif" border="0" alt="DNS Exit"></a>
-</div>
+    <!-- Chrome Web Store Button -->
+    <a id="chrome-btn" href="https://chrome.google.com/webstore/detail/jgofbnjkimhpkjeimcedipdeecegdkpp" target="_blank"
+       class="browser-btn">
+        <i class="fab fa-chrome"></i>
+        <span>Available On Chrome Web Store</span>
+    </a>
+
+    <!-- Firefox Add-ons Button -->
+    <a id="firefox-btn" href="https://addons.mozilla.org/firefox/addon/daily-islamic-hadith" target="_blank"
+       class="browser-btn">
+        <i class="fab fa-firefox-browser"></i>
+        <span>Available On Firefox Add-ons</span>
+    </a>
 <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 </body>
 </html>
