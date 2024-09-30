@@ -36,6 +36,33 @@ h1 {
     font-style: italic;
 }
 
+@media (min-width: 768px) {
+    .quote-container {
+        text-align: left;
+        max-width: 80%;
+    }
+    .quote-container div.quotes {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    #quoteEnglish {
+        flex: 1;
+        text-align: left;
+        margin-right: 20px;
+    }
+    #quoteArabic {
+        flex: 1;
+        text-align: right;
+        direction: rtl;
+        margin-left: 20px;
+    }
+    #source {
+        text-align: center;
+        margin-top: 20px;
+    }
+}
+
 .browser-btn {
     display: inline-flex;
     align-items: center;
