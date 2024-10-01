@@ -104,6 +104,36 @@
             from {bottom: 30px; opacity: 1;}
             to {bottom: 0; opacity: 0;}
         }
+        .browser-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            margin-top: 30px;
+            padding: 10px 20px;
+            border-radius: 8px; /* Rounded corners */
+            border: none;
+            color: #fff;
+            font-size: 1.2rem; /* Icon size */
+            transition: all 0.3s ease-in-out; /* Smooth transition */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+            cursor: pointer;
+        }
+        #chrome-btn {
+            background-color: #4285F4; /* Chrome Blue */
+            display: none;
+        }
+        #firefox-btn {
+            background-color: #FF7139; /* Firefox Orange */
+            display: none;
+        }
+        .browser-btn:hover {
+            transform: scale(1.05); /* Slightly grow on hover */
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Darker shadow on hover */
+        }
+        .browser-btn i {
+            margin-right: 10px;
+        }
     </style>
 </head>
 <body>
@@ -115,6 +145,16 @@
     </div>
     <button id="copyButton" aria-label="Copy Hadith to Clipboard"><i class="fas fa-copy"></i></button>
     <div id="notification">Hadith copied to clipboard!</div>
+    <a id="chrome-btn" href="https://chrome.google.com/webstore/detail/jgofbnjkimhpkjeimcedipdeecegdkpp" target="_blank"
+       class="browser-btn">
+        <i class="fab fa-chrome"></i>
+        <span>Available On Chrome Web Store</span>
+    </a>
+    <a id="firefox-btn" href="https://addons.mozilla.org/firefox/addon/daily-islamic-hadith" target="_blank"
+       class="browser-btn">
+        <i class="fab fa-firefox-browser"></i>
+        <span>Available On Firefox Add-ons</span>
+    </a>
     <div class="dns-link">
         <a href="http://dnsexit.com"><img src="http://dnsexit.com/images/dns2.gif" border="0" alt="DNS Exit"></a>
     </div>
@@ -176,6 +216,19 @@
 
         document.getElementById('copyButton').addEventListener('click', copyToClipboard);
 
+        function detectBrowser() {
+            const userAgent = navigator.userAgent;
+            const isMobileOrTablet = /Mobi|Android|iPhone|iPad|Tablet|Mobile/i.test(userAgent);
+
+            if (!isMobileOrTablet) {
+                if (userAgent.includes("Chrome") && !userAgent.includes("Edg") && !userAgent.includes("OPR")) {
+                    document.getElementById('chrome-btn').style.display = 'inline-block';
+                } else if (userAgent.includes("Firefox")) {
+                    document.getElementById('firefox-btn').style.display = 'inline-block';
+                }
+            }
+        }
+        detectBrowser();
         fetchDailyQuote();
     </script>
 </body>
