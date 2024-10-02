@@ -29,22 +29,25 @@
     {% endif %}
 </div>
 {% if today_hadith is defined and today_hadith is not none %}
-    <button id="copyButton" aria-label="Copy Hadith to Clipboard"><i class="fas fa-copy"></i></button>
+    <div class="button-group">
+        <button id="copyButton" class="btn" aria-label="Copy Hadith to Clipboard">
+            <i class="fas fa-copy"></i>
+            <span>Copy</span>
+        </button>
+        <a id="chrome-btn" href="https://chrome.google.com/webstore/detail/jgofbnjkimhpkjeimcedipdeecegdkpp"
+           target="_blank"
+           class="btn">
+            <i class="fab fa-chrome"></i>
+            <span>Add to Chrome</span>
+        </a>
+        <a id="firefox-btn" href="https://addons.mozilla.org/firefox/addon/daily-islamic-hadith" target="_blank"
+           class="btn">
+            <i class="fab fa-firefox-browser"></i>
+            <span>Add to Firefox</span>
+        </a>
+    </div>
     <div id="notification">Hadith copied to clipboard!</div>
 {% endif %}
-    <!-- Chrome Web Store Button -->
-    <a id="chrome-btn" href="https://chrome.google.com/webstore/detail/jgofbnjkimhpkjeimcedipdeecegdkpp" target="_blank"
-       class="browser-btn">
-        <i class="fab fa-chrome"></i>
-        <span>Available On Chrome Web Store</span>
-    </a>
-
-    <!-- Firefox Add-ons Button -->
-    <a id="firefox-btn" href="https://addons.mozilla.org/firefox/addon/daily-islamic-hadith" target="_blank"
-       class="browser-btn">
-        <i class="fab fa-firefox-browser"></i>
-        <span>Available On Firefox Add-ons</span>
-    </a>
 <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 </body>
 </html>
