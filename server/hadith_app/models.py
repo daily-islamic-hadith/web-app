@@ -11,3 +11,11 @@ class HadithMeta:
         self.book = book
         self.chapter = chapter
         self.number = number
+
+
+from enum import Enum
+
+
+class HadithFetchMode(Enum):
+    DAILY = 1
+    RANDOM = 2

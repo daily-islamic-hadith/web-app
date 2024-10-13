@@ -1,6 +1,9 @@
 from datetime import datetime
+from random import randint
+
 from hadith_app.client.hadith_api_client import fetch_hadith
 from hadith_app.dao import hadith_dao
+from hadith_app.models import HadithFetchMode
 import logging
 import os
 
@@ -12,6 +15,16 @@ logger = logging.getLogger(__name__)
 START_DATE = os.getenv('START_DATE', '2024-07-12')
 CACHED_HADITH_META = {}
 
+
+def get_hadith_by_mode(hadith_fetch_mode):
+    match hadith_fetch_mode:
+        case HadithFetchMode.DAILY:
+            return get_today_hadith()
+        case HadithFetchMode.RANDOM:
+            return get_random_hadith()
+        case _:
+            logger.error(f"Invalid fetch mode {hadith_fetch_mode}")
+            return None
 
 def get_today_hadith():
     """
@@ -31,6 +44,15 @@ def get_today_hadith():
         hadith_row_number = get_hadith_number(today)
         hadith_meta = fetch_hadith_meta(hadith_row_number)
         CACHED_HADITH_META[today] = hadith_meta
+    if hadith_meta:
+        return fetch_hadith(hadith_meta.book, hadith_meta.chapter, hadith_meta.number)
+    else:
+        return None
+
+
+def get_random_hadith():
+    hadith_row_number = get_random_hadith_number()
+    hadith_meta = fetch_hadith_meta(hadith_row_number)
     if hadith_meta:
         return fetch_hadith(hadith_meta.book, hadith_meta.chapter, hadith_meta.number)
     else:
@@ -71,6 +93,15 @@ def fetch_hadith_meta(hadith_row_number):
         raise
 
 
+def get_random_hadith_number():
+    try:
+        return randint(0, hadith_dao.get_total_hadith_count())
+    except Exception as e:
+        logger.error(f"Error calculating random hadith number: {e}")
+        raise
+
+
+
 def get_hadith_number(target_date):
     """
     Calculate the hadith number for the input date with respect to the start date.
@@ -87,7 +118,7 @@ def get_hadith_number(target_date):
     try:
         start_date = datetime.strptime(START_DATE, '%Y-%m-%d').date()
         days_passed = (target_date - start_date).days
-        hadith_number = days_passed % hadith_dao.get_total_hadith_count()
+        hadith_number = days_passed % hadith_dao.get_total_hadith_count() #TODO cache this number
         return hadith_number
     except Exception as e:
         logger.error(f"Error calculating hadith number for date {target_date}: {e}")

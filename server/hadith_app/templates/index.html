@@ -16,19 +16,19 @@
 <body>
 <h1>Hadith Of The Day</h1>
 <div class="quote-container" role="main" aria-live="polite">
-    {% if today_hadith is defined and today_hadith is not none %}
+    {% if hadith is defined and hadith is not none %}
         <div class="quotes">
-            <p id="quoteEnglish">{{ today_hadith.hadithEnglish }}</p>
-            <p id="quoteArabic" lang="ar">{{ today_hadith.hadithArabic }}</p>
+            <p id="quoteEnglish">{{ hadith.hadithEnglish }}</p>
+            <p id="quoteArabic" lang="ar">{{ hadith.hadithArabic }}</p>
         </div>
-        <p id="source">Source: {{ today_hadith.book.bookName }} by {{ today_hadith.book.writerName }}</p>
+        <p id="source">Source: {{ hadith.book.bookName }} by {{ hadith.book.writerName }}</p>
     {% else %}
         <p id="quoteEnglish">{{ error }}</p>
         <p id="quoteArabic" lang="ar"></p>
         <p id="source"></p>
     {% endif %}
 </div>
-{% if today_hadith is defined and today_hadith is not none %}
+{% if hadith is defined and hadith is not none %}
     <div class="button-group">
         <button id="copyButton" class="btn" aria-label="Copy Hadith to Clipboard">
             <i class="fas fa-copy"></i>
