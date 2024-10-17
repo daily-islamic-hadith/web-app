@@ -17,5 +17,5 @@ from enum import Enum
 
 
 class HadithFetchMode(Enum):
-    DAILY = 1
-    RANDOM = 2
+    DAILY = 'daily'
+    RANDOM = 'random'

@@ -1,4 +1,4 @@
-from flask import jsonify, render_template, send_from_directory
+from flask import jsonify, request, render_template, send_from_directory
 from flask_cors import cross_origin
 from hadith_app import app
 from hadith_app.service.hadith_service import get_hadith_by_mode
@@ -57,6 +57,22 @@ def get_hadith_of_the_day():
 @cross_origin()
 def get_random_hadith():
     result = _try_get_hadith(HadithFetchMode.RANDOM)
+    if result.get('hadith') is not None:
+        return result.get('hadith')
+    else:
+        return jsonify(error=result.get('error')), result.get('status_code')
+
+
+@app.route('/api/fetch-hadith')
+@cross_origin()
+def fetch_hadith():
+    fetch_mode_param = request.args.get('fetch-mode')
+    try:
+        hadith_fetch_mode = HadithFetchMode(fetch_mode_param.lower())
+    except Exception:
+        logger.error(f"Invalid fetch mode {fetch_mode_param}")
+        return jsonify(error='Invalid request fields'), 400
+    result = _try_get_hadith(hadith_fetch_mode)
     if result.get('hadith') is not None:
         return result.get('hadith')
     else:
