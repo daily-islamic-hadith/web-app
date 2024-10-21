@@ -95,7 +95,7 @@ h1 {
     margin-right: 5px;
 }
 
-#copyButton {
+#copyButton, #showNewHadith {
     display: flex;
 }
 
