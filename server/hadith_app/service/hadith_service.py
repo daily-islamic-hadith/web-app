@@ -16,6 +16,7 @@ logger = logging.getLogger(__name__)
 # Load configuration from environment variables or default values
 START_DATE = os.getenv('START_DATE', '2024-07-12')
 CACHED_HADITH_META = {}
+CACHED_HADITH_DATA_SET_SIZE = -1
 
 
 @dataclass
@@ -72,13 +73,17 @@ def get_random_hadith():
 
 
 def delete_today_hadith():
+    global CACHED_HADITH_DATA_SET_SIZE
     today = datetime.today().date()
     hadith_meta = CACHED_HADITH_META.pop(today, None)
     if hadith_meta is None:
         hadith_row_number = get_hadith_number(today)
         hadith_meta = fetch_hadith_meta(hadith_row_number)
     delete_count = hadith_dao.delete_hadith_meta(hadith_meta.book, hadith_meta.chapter, hadith_meta.number)
-    return delete_count is not None and delete_count > 0
+    deleted = delete_count is not None and delete_count > 0
+    if deleted:
+        CACHED_HADITH_DATA_SET_SIZE = -1
+    return deleted
 
 
 def fetch_hadith_meta(hadith_row_number):
@@ -107,7 +112,7 @@ def fetch_hadith_meta(hadith_row_number):
 
 def get_random_hadith_number():
     try:
-        return randint(0, hadith_dao.get_total_hadith_count())
+        return randint(0, get_total_hadith_count())
     except Exception as e:
         logger.error(f"Error calculating random hadith number: {e}")
         raise
@@ -130,11 +135,18 @@ def get_hadith_number(target_date):
     try:
         start_date = datetime.strptime(START_DATE, '%Y-%m-%d').date()
         days_passed = (target_date - start_date).days
-        hadith_number = days_passed % hadith_dao.get_total_hadith_count() #TODO cache this number
+        hadith_number = days_passed % get_total_hadith_count()
         return hadith_number
     except Exception as e:
         logger.error(f"Error calculating hadith number for date {target_date}: {e}")
         raise
+
+
+def get_total_hadith_count():
+    global CACHED_HADITH_DATA_SET_SIZE
+    if CACHED_HADITH_DATA_SET_SIZE < 0:
+        CACHED_HADITH_DATA_SET_SIZE = hadith_dao.get_total_hadith_count()
+    return CACHED_HADITH_DATA_SET_SIZE
 
 
 def to_dto(hadith_entity: dict) -> Optional[HadithDto]:
