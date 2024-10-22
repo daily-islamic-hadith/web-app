@@ -171,8 +171,8 @@
                 if (dailyHadith) {
                     const quoteEnglish = dailyHadith.hadithEnglish || 'English version not available';
                     const quoteArabic = dailyHadith.hadithArabic || 'Arabic version not available';
-                    const bookName = dailyHadith.book?.bookName || 'Book name not available';
-                    const writerName = dailyHadith.book?.writerName || 'Writer name not available';
+                    const bookName = dailyHadith.bookName || 'Book name not available';
+                    const writerName = dailyHadith.bookWriterName || 'Writer name not available';
                     const source = `Source: ${bookName} by ${writerName}`;
                     document.getElementById('quoteEnglish').textContent = quoteEnglish;
                     document.getElementById('quoteArabic').textContent = quoteArabic;

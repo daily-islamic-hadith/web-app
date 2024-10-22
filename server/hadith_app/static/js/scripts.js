@@ -21,8 +21,8 @@ async function fetchNewHadith() {
         if (hadith) {
             const quoteEnglish = hadith.hadithEnglish || 'English version not available';
             const quoteArabic = hadith.hadithArabic || 'Arabic version not available';
-            const bookName = hadith.book?.bookName || 'Book name not available';
-            const writerName = hadith.book?.writerName || 'Writer name not available';
+            const bookName = hadith.bookName || 'Book name not available';
+            const writerName = hadith.bookWriterName || 'Writer name not available';
             const source = `Source: ${bookName} by ${writerName}`;
             document.getElementById('quoteEnglish').textContent = quoteEnglish;
             document.getElementById('quoteArabic').textContent = quoteArabic;

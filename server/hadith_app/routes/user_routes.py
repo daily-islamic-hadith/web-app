@@ -48,7 +48,7 @@ def get_hadith_of_the_day():
     """
     result = _try_get_hadith(HadithFetchMode.DAILY)
     if result.get('hadith') is not None:
-        return result.get('hadith')
+        return jsonify(result.get('hadith'))
     else:
         return jsonify(error=result.get('error')), result.get('status_code')
 
@@ -58,7 +58,7 @@ def get_hadith_of_the_day():
 def get_random_hadith():
     result = _try_get_hadith(HadithFetchMode.RANDOM)
     if result.get('hadith') is not None:
-        return result.get('hadith')
+        return jsonify(result.get('hadith'))
     else:
         return jsonify(error=result.get('error')), result.get('status_code')
 
@@ -74,7 +74,7 @@ def fetch_hadith():
         return jsonify(error='Invalid request fields'), 400
     result = _try_get_hadith(hadith_fetch_mode)
     if result.get('hadith') is not None:
-        return result.get('hadith')
+        return jsonify(result.get('hadith'))
     else:
         return jsonify(error=result.get('error')), result.get('status_code')
 

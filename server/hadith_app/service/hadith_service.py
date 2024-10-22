@@ -1,5 +1,7 @@
 from datetime import datetime
+from dataclasses import dataclass
 from random import randint
+from typing import Optional
 
 from hadith_app.client.hadith_api_client import fetch_hadith
 from hadith_app.dao import hadith_dao
@@ -14,6 +16,14 @@ logger = logging.getLogger(__name__)
 # Load configuration from environment variables or default values
 START_DATE = os.getenv('START_DATE', '2024-07-12')
 CACHED_HADITH_META = {}
+
+
+@dataclass
+class HadithDto:
+    hadithArabic: str
+    hadithEnglish: str
+    bookName: Optional[str] = None
+    bookWriterName: Optional[str] = None
 
 
 def get_hadith_by_mode(hadith_fetch_mode):
@@ -45,7 +55,8 @@ def get_today_hadith():
         hadith_meta = fetch_hadith_meta(hadith_row_number)
         CACHED_HADITH_META[today] = hadith_meta
     if hadith_meta:
-        return fetch_hadith(hadith_meta.book, hadith_meta.chapter, hadith_meta.number)
+        hadith_entity = fetch_hadith(hadith_meta.book, hadith_meta.chapter, hadith_meta.number)
+        return to_dto(hadith_entity)
     else:
         return None
 
@@ -54,7 +65,8 @@ def get_random_hadith():
     hadith_row_number = get_random_hadith_number()
     hadith_meta = fetch_hadith_meta(hadith_row_number)
     if hadith_meta:
-        return fetch_hadith(hadith_meta.book, hadith_meta.chapter, hadith_meta.number)
+        hadith_entity = fetch_hadith(hadith_meta.book, hadith_meta.chapter, hadith_meta.number)
+        return to_dto(hadith_entity)
     else:
         return None
 
@@ -123,3 +135,24 @@ def get_hadith_number(target_date):
     except Exception as e:
         logger.error(f"Error calculating hadith number for date {target_date}: {e}")
         raise
+
+
+def to_dto(hadith_entity: dict) -> Optional[HadithDto]:
+    """
+    Convert a hadith entity dictionary to a HadithDto object.
+
+    Args:
+        hadith_entity (dict): A dictionary containing hadith data.
+
+    Returns:
+        Optional[HadithDto]: A HadithDto object if the input is not None, otherwise None.
+    """
+    if hadith_entity is None:
+        return None
+    book = hadith_entity.get('book', {})
+    return HadithDto(
+        hadith_entity.get('hadithArabic'),
+        hadith_entity.get('hadithEnglish'),
+        book.get('bookName'),
+        book.get('writerName')
+    )

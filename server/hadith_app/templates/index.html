@@ -21,7 +21,7 @@
             <p id="quoteEnglish">{{ hadith.hadithEnglish }}</p>
             <p id="quoteArabic" lang="ar">{{ hadith.hadithArabic }}</p>
         </div>
-        <p id="source">Source: {{ hadith.book.bookName }} by {{ hadith.book.writerName }}</p>
+        <p id="source">Source: {{ hadith.bookName }} by {{ hadith.bookWriterName }}</p>
     {% else %}
         <p id="quoteEnglish">{{ error }}</p>
         <p id="quoteArabic" lang="ar"></p>
