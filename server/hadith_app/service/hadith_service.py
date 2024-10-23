@@ -15,6 +15,7 @@ logger = logging.getLogger(__name__)
 
 # Load configuration from environment variables or default values
 START_DATE = os.getenv('START_DATE', '2024-07-12')
+# TODO replace with cache package.
 CACHED_HADITH_META = {}
 CACHED_HADITH_DATA_SET_SIZE = -1
 
@@ -64,7 +65,10 @@ def get_today_hadith():
 
 def get_random_hadith():
     hadith_row_number = get_random_hadith_number()
-    hadith_meta = fetch_hadith_meta(hadith_row_number)
+    hadith_meta = CACHED_HADITH_META.get(hadith_row_number)
+    if hadith_meta is None:
+        hadith_meta = fetch_hadith_meta(hadith_row_number)
+        CACHED_HADITH_META[hadith_row_number] = hadith_meta
     if hadith_meta:
         hadith_entity = fetch_hadith(hadith_meta.book, hadith_meta.chapter, hadith_meta.number)
         return to_dto(hadith_entity)
