@@ -1,6 +1,8 @@
+import string
 import requests
 import logging
 import argparse
+import random
 
 # Constants
 BASE_ENDPOINT = 'https://www.hadithapi.com/api/hadiths'
@@ -55,10 +57,11 @@ def write_output_file(output_file_path, hadiths):
     try:
         with open(output_file_path, 'w') as file:
             for hadith in hadiths:
+                reference = random.choice(string.ascii_uppercase + string.digits)
                 book = hadith.get('bookSlug', '')
                 chapter = hadith.get('chapterId', '')
                 hadith_number = hadith.get('hadithNumber', '')
-                file.write(f"{book},{chapter},{hadith_number}\n")
+                file.write(f"{reference},{book},{chapter},{hadith_number}\n")
         logging.info(f"Hadiths successfully written to {output_file_path}")
     except Exception as e:
         logging.error(f"An error occurred while writing to the file: {e}")

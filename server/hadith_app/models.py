@@ -7,10 +7,11 @@ class User:
 
 
 class HadithMeta:
-    def __init__(self, book, chapter, number):
+    def __init__(self, book, chapter, number, reference):
         self.book = book
         self.chapter = chapter
         self.number = number
+        self.reference = reference
 
 
 from enum import Enum

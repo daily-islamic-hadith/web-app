@@ -82,6 +82,6 @@ def delete_hadith_meta(book, chapter, number):
 
 def bind_to_hadith_meta(db_row_result):
     if db_row_result:
-        return HadithMeta(db_row_result[0], db_row_result[1], db_row_result[2])
+        return HadithMeta(db_row_result[0], db_row_result[1], db_row_result[2], db_row_result[3])
     else:
         return None
