@@ -18,12 +18,12 @@
 <div class="quote-container" role="main" aria-live="polite">
     {% if hadith is defined and hadith is not none %}
         <div class="quotes">
-            <p id="quoteEnglish">{{ hadith.hadithEnglish }}</p>
-            <p id="quoteArabic" lang="ar">{{ hadith.hadithArabic }}</p>
+            <p id="quoteEnglish">{{ hadith.hadithEnglish|e }}</p>
+            <p id="quoteArabic" lang="ar">{{ hadith.hadithArabic|e }}</p>
         </div>
-        <p id="source">Source: {{ hadith.bookName }} by {{ hadith.bookWriterName }}</p>
+        <p id="source">Source: {{ hadith.bookName|e }} by {{ hadith.bookWriterName|e }}</p>
     {% else %}
-        <p id="quoteEnglish">{{ error }}</p>
+        <p id="quoteEnglish">{{ error|e }}</p>
         <p id="quoteArabic" lang="ar"></p>
         <p id="source"></p>
     {% endif %}

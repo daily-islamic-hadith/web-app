@@ -67,10 +67,12 @@ def get_random_hadith():
 @cross_origin()
 def fetch_hadith():
     fetch_mode_param = request.args.get('fetch-mode')
+    if not fetch_mode_param:
+        return jsonify(error='fetch-mode param is missing'), 400
     try:
         hadith_fetch_mode = HadithFetchMode(fetch_mode_param.lower())
-    except Exception:
-        logger.error(f"Invalid fetch mode {fetch_mode_param}")
+    except ValueError:
+        logger.error(f"Invalid fetch mode {repr(fetch_mode_param)[:10]}")
         return jsonify(error='Invalid request fields'), 400
     result = _try_get_hadith(hadith_fetch_mode)
     if result.get('hadith') is not None:
