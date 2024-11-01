@@ -6,7 +6,7 @@ from hadith_app.auth.utils import role_required
 from hadith_app.service.hadith_service import delete_today_hadith
 
 
-@app.route('/admin/delete-today-hadith')
+@app.route('/admin/api/delete-today-hadith')
 @cross_origin()
 @role_required('admin')
 def delete_hadith_of_the_day():

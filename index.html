@@ -164,31 +164,34 @@
 
             try {
                 const response = await fetch(url);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const dailyHadith = await response.json();
-                if (dailyHadith) {
-                    const quoteEnglish = dailyHadith.hadithEnglish || 'English version not available';
-                    const quoteArabic = dailyHadith.hadithArabic || 'Arabic version not available';
-                    const bookName = dailyHadith.bookName || 'Book name not available';
-                    const writerName = dailyHadith.bookWriterName || 'Writer name not available';
-                    const source = `Source: ${bookName} by ${writerName}`;
-                    document.getElementById('quoteEnglish').textContent = quoteEnglish;
-                    document.getElementById('quoteArabic').textContent = quoteArabic;
-                    document.getElementById('source').textContent = source;
+                const json_response = await response.json();
+                if (json_response) {
+                    if (response.ok) {
+                        const quoteEnglish = json_response.hadithEnglish || 'English version not available';
+                        const quoteArabic = json_response.hadithArabic || 'Arabic version not available';
+                        const bookName = json_response.bookName || 'Book name not available';
+                        const writerName = json_response.bookWriterName || 'Writer name not available';
+                        const source = `Source: ${bookName} by ${writerName}`;
+                        document.getElementById('quoteEnglish').textContent = quoteEnglish;
+                        document.getElementById('quoteArabic').textContent = quoteArabic;
+                        document.getElementById('source').textContent = source;
 
-                    // Show the copy button after successful fetch
-                    document.getElementById('copyButton').style.display = 'flex';
+                        // Show the copy button after successful fetch
+                        document.getElementById('copyButton').style.display = 'flex';
+                    } else {
+                        document.getElementById('quoteEnglish').textContent = json_response.error;
+                        document.getElementById('quoteArabic').textContent = '';
+                        document.getElementById('source').textContent = '';
+                    }
                 } else {
-                    document.getElementById('quoteEnglish').textContent = 'No hadith found.';
-                    document.getElementById('quoteArabic').textContent = '';
+                    document.getElementById('quoteEnglish').textContent = 'Somthing went wrong. Please try again later.';
+                    document.getElementById('quoteArabic').textContent = 'حدث خطأ ما. يرجى المحاولة مرة أخرى في وقت لاحق.';
                     document.getElementById('source').textContent = '';
                 }
             } catch (error) {
                 console.error('Failed to fetch the hadith:', error);
                 document.getElementById('quoteEnglish').textContent = 'Failed to fetch the quote. Please try again later.';
-                document.getElementById('quoteArabic').textContent = '';
+                document.getElementById('quoteArabic').textContent = 'حدث خطأ ما. يرجى المحاولة مرة أخرى في وقت لاحق.';
                 document.getElementById('source').textContent = '';
             }
         }

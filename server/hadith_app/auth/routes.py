@@ -7,7 +7,7 @@ from hadith_app.service import user_service
 from .schemas import CredentialsSchema
 
 
-@auth_bp.route('/get-token', methods=['POST'])
+@auth_bp.route('/api/get-token', methods=['POST'])
 @cross_origin()
 def generate_access_token():
     schema = CredentialsSchema()
