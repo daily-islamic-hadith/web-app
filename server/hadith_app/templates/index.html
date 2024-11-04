@@ -22,10 +22,12 @@
             <p id="quoteArabic" lang="ar">{{ hadith.hadithArabic|e }}</p>
         </div>
         <p id="source">Source: {{ hadith.bookName|e }} by {{ hadith.bookWriterName|e }}</p>
+        <input id="reference" type="hidden" value="{{ hadith.reference }}"/>
     {% else %}
         <p id="quoteEnglish">{{ error|e }}</p>
         <p id="quoteArabic" lang="ar"></p>
         <p id="source"></p>
+        <input id="reference" type="hidden" value=""/>
     {% endif %}
 </div>
 {% if hadith is defined and hadith is not none %}

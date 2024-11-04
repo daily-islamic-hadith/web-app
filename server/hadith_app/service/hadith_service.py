@@ -4,7 +4,7 @@ from random import randint
 from typing import Optional
 
 from hadith_app.dao import hadith_dao
-from hadith_app.models import HadithFetchMode
+from hadith_app.models import HadithFetchMode, HadithMeta
 import logging
 import os
 
@@ -21,6 +21,7 @@ CACHED_HADITH_DATA_SET_SIZE = -1
 
 @dataclass
 class HadithDto:
+    reference: str
     hadithArabic: str
     hadithEnglish: str
     bookName: Optional[str] = None
@@ -55,11 +56,7 @@ def get_today_hadith():
         hadith_row_number = get_hadith_number(today)
         hadith_meta = fetch_hadith_meta(hadith_row_number)
         CACHED_HADITH_META[today] = hadith_meta
-    if hadith_meta:
-        hadith_entity = hadith_meta.hadith_json
-        return to_dto(hadith_entity)
-    else:
-        return None
+    return to_dto(hadith_meta)
 
 
 def get_random_hadith():
@@ -68,11 +65,7 @@ def get_random_hadith():
     if hadith_meta is None:
         hadith_meta = fetch_hadith_meta(hadith_row_number)
         CACHED_HADITH_META[hadith_row_number] = hadith_meta
-    if hadith_meta:
-        hadith_entity = hadith_meta.hadith_json
-        return to_dto(hadith_entity)
-    else:
-        return None
+    return to_dto(hadith_meta)
 
 
 def delete_today_hadith():
@@ -82,7 +75,7 @@ def delete_today_hadith():
     if hadith_meta is None:
         hadith_row_number = get_hadith_number(today)
         hadith_meta = fetch_hadith_meta(hadith_row_number)
-    delete_count = hadith_dao.delete_hadith_meta(hadith_meta.book, hadith_meta.chapter, hadith_meta.number)
+    delete_count = hadith_dao.delete_hadith_meta(hadith_meta.reference)
     deleted = delete_count is not None and delete_count > 0
     if deleted:
         CACHED_HADITH_DATA_SET_SIZE = -1
@@ -152,20 +145,24 @@ def get_total_hadith_count():
     return CACHED_HADITH_DATA_SET_SIZE
 
 
-def to_dto(hadith_entity: dict) -> Optional[HadithDto]:
+def to_dto(hadith_meta: HadithMeta) -> Optional[HadithDto]:
     """
-    Convert a hadith entity dictionary to a HadithDto object.
+    Convert a hadithMeta object to a HadithDto object.
 
     Args:
-        hadith_entity (dict): A dictionary containing hadith data.
+        hadith_meta (HadithMeta): A HadithMeta object
 
     Returns:
         Optional[HadithDto]: A HadithDto object if the input is not None, otherwise None.
     """
+    if hadith_meta is None:
+        return None
+    hadith_entity = hadith_meta.hadith_json
     if hadith_entity is None:
         return None
     book = hadith_entity.get('book', {})
     return HadithDto(
+        hadith_meta.reference,
         hadith_entity.get('hadithArabic'),
         hadith_entity.get('hadithEnglish'),
         book.get('bookName'),
