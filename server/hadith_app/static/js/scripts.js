@@ -25,6 +25,7 @@ async function fetchNewHadith() {
                 document.getElementById('quoteEnglish').textContent = quoteEnglish;
                 document.getElementById('quoteArabic').textContent = quoteArabic;
                 document.getElementById('source').textContent = source;
+                document.getElementById("reference").value = json_response.reference;
 
                 // Show the copy button after successful fetch
                 document.getElementById('copyButton').style.display = 'flex';
@@ -32,17 +33,20 @@ async function fetchNewHadith() {
                 document.getElementById('quoteEnglish').textContent = json_response.error;
                 document.getElementById('quoteArabic').textContent = '';
                 document.getElementById('source').textContent = '';
+                document.getElementById("reference").value = '';
             }
         } else {
             document.getElementById('quoteEnglish').textContent = 'Somthing went wrong. Please try again later.';
             document.getElementById('quoteArabic').textContent = 'حدث خطأ ما. يرجى المحاولة مرة أخرى في وقت لاحق.';
             document.getElementById('source').textContent = '';
+            document.getElementById("reference").value = '';
         }
     } catch (error) {
         console.error('Failed to fetch the hadith:', error);
         document.getElementById('quoteEnglish').textContent = 'Failed to fetch hadith. Please try again later.';
         document.getElementById('quoteArabic').textContent = 'حدث خطأ ما. يرجى المحاولة مرة أخرى في وقت لاحق.';
         document.getElementById('source').textContent = '';
+        document.getElementById("reference").value = '';
     }
 }
 

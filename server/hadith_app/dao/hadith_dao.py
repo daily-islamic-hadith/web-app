@@ -70,11 +70,11 @@ def get_total_hadith_count():
         db.close_connection()
 
 
-def delete_hadith_meta(book, chapter, number):
+def delete_hadith_meta(reference):
     db.connect()
     try:
-        result = db.execute_modify_query("DELETE FROM hadith_meta WHERE book=? and chapter=? and hadithnumber=?;",
-                                         (book, chapter, number,))
+        result = db.execute_modify_query("DELETE FROM hadith_meta WHERE reference=?;",
+                                         (reference,))
         return result
     except Exception as e:
         logger.error(f"Error deleting hadith meta : {e}")
