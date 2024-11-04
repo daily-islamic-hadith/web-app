@@ -13,7 +13,7 @@ def generate_access_token():
     schema = CredentialsSchema()
     errors = schema.validate(request.form)
     if errors:
-        return jsonify({"error": errors}), 400
+        return jsonify({"error": "Invalid Credentials"}), 401
     username = request.form.get('username')
     password = request.form.get('password')
     valid_credentials = user_service.validate_user_credentials(username, password)
