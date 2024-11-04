@@ -3,7 +3,6 @@ from dataclasses import dataclass
 from random import randint
 from typing import Optional
 
-from hadith_app.client.hadith_api_client import fetch_hadith
 from hadith_app.dao import hadith_dao
 from hadith_app.models import HadithFetchMode
 import logging
@@ -57,7 +56,7 @@ def get_today_hadith():
         hadith_meta = fetch_hadith_meta(hadith_row_number)
         CACHED_HADITH_META[today] = hadith_meta
     if hadith_meta:
-        hadith_entity = fetch_hadith(hadith_meta.book, hadith_meta.chapter, hadith_meta.number)
+        hadith_entity = hadith_meta.hadith_json
         return to_dto(hadith_entity)
     else:
         return None
@@ -70,7 +69,7 @@ def get_random_hadith():
         hadith_meta = fetch_hadith_meta(hadith_row_number)
         CACHED_HADITH_META[hadith_row_number] = hadith_meta
     if hadith_meta:
-        hadith_entity = fetch_hadith(hadith_meta.book, hadith_meta.chapter, hadith_meta.number)
+        hadith_entity = hadith_meta.hadith_json
         return to_dto(hadith_entity)
     else:
         return None
