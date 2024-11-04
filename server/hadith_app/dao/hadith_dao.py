@@ -1,3 +1,4 @@
+import json
 import logging
 from hadith_app.extensions import db
 from hadith_app.models import HadithMeta
@@ -30,7 +31,9 @@ def get_hadith_meta(row_number):
     """
     db.connect()
     try:
-        result = db.execute_read_query("SELECT * FROM hadith_meta limit 1 offset ?;", (row_number,))
+        result = db.execute_read_query(
+            "SELECT book, chapter, hadithnumber, reference, hadith_obj FROM hadith_meta limit 1 offset ?;",
+            (row_number,))
         if result:
             return bind_to_hadith_meta(result[0])
         else:
@@ -82,6 +85,11 @@ def delete_hadith_meta(book, chapter, number):
 
 def bind_to_hadith_meta(db_row_result):
     if db_row_result:
-        return HadithMeta(db_row_result[0], db_row_result[1], db_row_result[2], db_row_result[3])
+        blob_data = db_row_result[4]
+        if isinstance(blob_data, bytes):
+            json_blob = json.loads(blob_data.decode('utf-8'))
+        else:
+            json_blob = blob_data
+        return HadithMeta(db_row_result[0], db_row_result[1], db_row_result[2], db_row_result[3], json_blob)
     else:
         return None
