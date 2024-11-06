@@ -4,6 +4,25 @@ import sqlite3
 
 
 def process(hadiths_json_file_path, db_url):
+    """
+    Process hadiths from a JSON file and update them in the database.
+
+    This function reads a JSON file containing an array of hadith objects,
+    connects to a SQLite database, and updates the 'hadith_meta' table with
+    the hadith data.
+
+    Args:
+        hadiths_json_file_path (str): Path to the JSON file containing hadith data.
+        db_url (str): URL of the SQLite database to update.
+
+    The function performs the following steps:
+    1. Loads the JSON data from the file.
+    2. Connects to the SQLite database.
+    3. For each hadith object in the JSON data:
+       - Converts the object to a JSON blob.
+       - Updates the corresponding record in the 'hadith_meta' table.
+    4. Commits the changes and closes the database connection.
+    """
     # Load JSON array from file
     with open(hadiths_json_file_path, 'r') as f:
         json_data = json.load(f)  # the file contains a JSON array of hadith objects
