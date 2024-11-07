@@ -90,10 +90,14 @@ def bind_to_hadith_meta(db_row_result):
         blob_data = db_row_result[1]
         ar_explanation = db_row_result[2]
         if ar_explanation is not None:
-            ar_explanation = db_row_result[2].decode('utf-8')
+            if isinstance(ar_explanation, memoryview):
+                ar_explanation = bytes(ar_explanation)
+            ar_explanation = ar_explanation.decode('utf-8')
         en_explanation = db_row_result[3]
         if en_explanation is not None:
-            en_explanation = db_row_result[3].decode('utf-8')
+            if isinstance(en_explanation, memoryview):
+                en_explanation = bytes(en_explanation)
+            en_explanation = en_explanation.decode('utf-8')
         if isinstance(blob_data, bytes):
             json_blob = json.loads(blob_data.decode('utf-8'))
         else:
