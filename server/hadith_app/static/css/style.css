@@ -25,15 +25,55 @@ h1 {
     overflow-y: auto;
 }
 
-.quote-container p#quoteArabic {
+.quote-container p.quoteArabic {
     font-family: 'Amiri', serif;
     direction: rtl;
+    font-size: 1.2em;
+}
+
+.quote-container p.quoteEnglish {
+    direction: ltr;
     font-size: 1.2em;
 }
 
 .quote-container p#source {
     color: #757575;
     font-style: italic;
+}
+
+details summary {
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-block-end: 1em;
+    cursor: pointer;
+    list-style: none;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.3s ease;
+}
+
+summary i {
+    font-size: 1.2em;
+    transition: transform 0.3s ease;
+    vertical-align: bottom;
+}
+
+details[open] summary i {
+    transform: rotate(180deg);
+}
+
+summary p {
+    margin-block-start: 0;
+}
+
+#summary_mob_title {
+    display: inline-block;
+    text-align: center;
+    justify-content: center;
+}
+
+#summary_en_title, #summary_ar_title {
+    display: none;
 }
 
 @media (min-width: 768px) {
@@ -44,14 +84,13 @@ h1 {
     .quote-container div.quotes {
         display: flex;
         justify-content: space-between;
-        align-items: center;
     }
-    #quoteEnglish {
+    .quoteEnglish {
         flex: 1;
         text-align: left;
         margin-right: 20px;
     }
-    #quoteArabic {
+    .quoteArabic {
         flex: 1;
         text-align: right;
         direction: rtl;
@@ -60,6 +99,19 @@ h1 {
     #source {
         text-align: center;
         margin-top: 20px;
+    }
+
+    details summary {
+        display: flex;
+        font-weight: bold;
+    }
+
+    #summary_mob_title {
+        display: none;
+    }
+
+    #summary_en_title, #summary_ar_title {
+        display: inline-block;
     }
 }
 

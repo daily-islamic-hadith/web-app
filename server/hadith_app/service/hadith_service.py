@@ -26,6 +26,8 @@ class HadithDto:
     hadithEnglish: str
     bookName: Optional[str] = None
     bookWriterName: Optional[str] = None
+    hadithExplanationArabic: Optional[str] = None
+    hadithExplanationEnglish: Optional[str] = None
 
 
 def get_hadith_by_mode(hadith_fetch_mode):
@@ -166,5 +168,7 @@ def to_dto(hadith_meta: HadithMeta) -> Optional[HadithDto]:
         hadith_entity.get('hadithArabic'),
         hadith_entity.get('hadithEnglish'),
         book.get('bookName'),
-        book.get('writerName')
+        book.get('writerName'),
+        hadith_meta.ar_explanation,
+        hadith_meta.en_explanation
     )
