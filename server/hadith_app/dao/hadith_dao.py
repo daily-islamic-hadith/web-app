@@ -33,7 +33,7 @@ def get_hadith_meta(row_number):
     try:
         result = db.execute_read_query(
             "SELECT reference, hadith_obj, exp_ar, exp_en FROM hadith_meta "
-            "left join main.hadith_explanation on hadith_meta.reference = hadith_explanation.hadith_ref "
+            "left join hadith_explanation on hadith_meta.reference = hadith_explanation.hadith_ref "
             "limit 1 offset ?;",
             (row_number,))
         if result:
