@@ -17,36 +17,46 @@ async function fetchNewHadith() {
         const json_response = await response.json();
         if (json_response) {
             if (response.ok) {
-                const quoteEnglish = json_response.hadithEnglish || 'English version not available';
-                const quoteArabic = json_response.hadithArabic || 'Arabic version not available';
+                const hadithEnglish = json_response.hadithEnglish || 'English version not available';
+                const hadithArabic = json_response.hadithArabic || 'Arabic version not available';
+                const exp_ar = json_response.hadithExplanationArabic;
+                const exp_en = json_response.hadithExplanationEnglish;
                 const bookName = json_response.bookName || 'Book name not available';
                 const writerName = json_response.bookWriterName || 'Writer name not available';
                 const source = `Source: ${bookName} by ${writerName}`;
-                document.getElementById('quoteEnglish').textContent = quoteEnglish;
-                document.getElementById('quoteArabic').textContent = quoteArabic;
+                document.getElementById('hadithEnglish').textContent = hadithEnglish;
+                document.getElementById('hadithArabic').textContent = hadithArabic;
                 document.getElementById('source').textContent = source;
                 document.getElementById("reference").value = json_response.reference;
+                document.getElementById("exp_en").textContent = exp_en ? exp_en : 'Explanation not found';
+                document.getElementById("exp_ar").textContent = exp_ar ? exp_ar : 'لا يوجد تفسير';
 
                 // Show the copy button after successful fetch
                 document.getElementById('copyButton').style.display = 'flex';
             } else {
-                document.getElementById('quoteEnglish').textContent = json_response.error;
-                document.getElementById('quoteArabic').textContent = '';
+                document.getElementById('hadithEnglish').textContent = json_response.error;
+                document.getElementById('hadithArabic').textContent = '';
                 document.getElementById('source').textContent = '';
                 document.getElementById("reference").value = '';
+                document.getElementById("exp_en").textContent = '';
+                document.getElementById("exp_ar").textContent = '';
             }
         } else {
-            document.getElementById('quoteEnglish').textContent = 'Somthing went wrong. Please try again later.';
-            document.getElementById('quoteArabic').textContent = 'حدث خطأ ما. يرجى المحاولة مرة أخرى في وقت لاحق.';
+            document.getElementById('hadithEnglish').textContent = 'Somthing went wrong. Please try again later.';
+            document.getElementById('hadithArabic').textContent = 'حدث خطأ ما. يرجى المحاولة مرة أخرى في وقت لاحق.';
             document.getElementById('source').textContent = '';
             document.getElementById("reference").value = '';
+            document.getElementById("exp_en").textContent = '';
+            document.getElementById("exp_ar").textContent = '';
         }
     } catch (error) {
         console.error('Failed to fetch the hadith:', error);
-        document.getElementById('quoteEnglish').textContent = 'Failed to fetch hadith. Please try again later.';
-        document.getElementById('quoteArabic').textContent = 'حدث خطأ ما. يرجى المحاولة مرة أخرى في وقت لاحق.';
+        document.getElementById('hadithEnglish').textContent = 'Failed to fetch hadith. Please try again later.';
+        document.getElementById('hadithArabic').textContent = 'حدث خطأ ما. يرجى المحاولة مرة أخرى في وقت لاحق.';
         document.getElementById('source').textContent = '';
         document.getElementById("reference").value = '';
+        document.getElementById("exp_en").textContent = '';
+        document.getElementById("exp_ar").textContent = '';
     }
 }
 
@@ -64,10 +74,10 @@ function detectBrowser() {
 }
 
 async function copyToClipboard() {
-    const quoteEnglish = document.getElementById('quoteEnglish').textContent;
-    const quoteArabic = document.getElementById('quoteArabic').textContent;
+    const hadithEnglish = document.getElementById('hadithEnglish').textContent;
+    const hadithArabic = document.getElementById('hadithArabic').textContent;
     const source = document.getElementById('source').textContent;
-    const textToCopy = `${quoteEnglish}\n\n${quoteArabic}\n\n${source}`;
+    const textToCopy = `${hadithEnglish}\n\n${hadithArabic}\n\n${source}`;
 
     try {
         await navigator.clipboard.writeText(textToCopy);

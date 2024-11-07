@@ -21,14 +21,26 @@
 <div class="quote-container" role="main" aria-live="polite">
     {% if hadith is defined and hadith is not none %}
         <div class="quotes">
-            <p id="quoteEnglish">{{ hadith.hadithEnglish|e }}</p>
-            <p id="quoteArabic" lang="ar">{{ hadith.hadithArabic|e }}</p>
+            <p id="hadithEnglish" class="quoteEnglish">{{ hadith.hadithEnglish|e }}</p>
+            <p id="hadithArabic" class="quoteArabic" lang="ar">{{ hadith.hadithArabic|e }}</p>
         </div>
+        <details>
+            <summary>
+                <div id="summary_en_title" class="quoteEnglish"><i class="fas fa-caret-down"></i> Explanation</div>
+                <div id="summary_ar_title" class="quoteArabic"><i class="fas fa-caret-down"></i> تفسير الحديث</div>
+                <div id="summary_mob_title"><i class="fas fa-caret-down"></i> Explanation تفسير الحديث</div>
+            </summary>
+            <div class="quotes">
+                <p id="exp_en" class="quoteEnglish" lang="en">{{ hadith.hadithExplanationEnglish|e }}</p>
+                <p id="exp_ar" class="quoteArabic" lang="ar">{{ hadith.hadithExplanationArabic|e }}</p>
+            </div>
+        </details>
+
         <p id="source">Source: {{ hadith.bookName|e }} by {{ hadith.bookWriterName|e }}</p>
         <input id="reference" type="hidden" value="{{ hadith.reference }}"/>
     {% else %}
-        <p id="quoteEnglish">{{ error|e }}</p>
-        <p id="quoteArabic" lang="ar"></p>
+        <p id="hadithEnglish" class="quoteEnglish">{{ error|e }}</p>
+        <p id="hadithArabic" class="quoteArabic" lang="ar"></p>
         <p id="source"></p>
         <input id="reference" type="hidden" value=""/>
     {% endif %}

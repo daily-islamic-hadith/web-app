@@ -32,7 +32,9 @@ def get_hadith_meta(row_number):
     db.connect()
     try:
         result = db.execute_read_query(
-            "SELECT book, chapter, hadithnumber, reference, hadith_obj FROM hadith_meta limit 1 offset ?;",
+            "SELECT reference, hadith_obj, exp_ar, exp_en FROM hadith_meta "
+            "left join main.hadith_explanation on hadith_meta.reference = hadith_explanation.hadith_ref "
+            "limit 1 offset ?;",
             (row_number,))
         if result:
             return bind_to_hadith_meta(result[0])
@@ -85,11 +87,17 @@ def delete_hadith_meta(reference):
 
 def bind_to_hadith_meta(db_row_result):
     if db_row_result:
-        blob_data = db_row_result[4]
+        blob_data = db_row_result[1]
+        ar_explanation = db_row_result[2]
+        if ar_explanation is not None:
+            ar_explanation = db_row_result[2].decode('utf-8')
+        en_explanation = db_row_result[3]
+        if en_explanation is not None:
+            en_explanation = db_row_result[3].decode('utf-8')
         if isinstance(blob_data, bytes):
             json_blob = json.loads(blob_data.decode('utf-8'))
         else:
             json_blob = blob_data
-        return HadithMeta(db_row_result[0], db_row_result[1], db_row_result[2], db_row_result[3], json_blob)
+        return HadithMeta(db_row_result[0], json_blob, ar_explanation, en_explanation)
     else:
         return None
