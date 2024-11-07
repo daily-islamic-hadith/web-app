@@ -31,8 +31,20 @@
                 <div id="summary_mob_title"><i class="fas fa-caret-down"></i> Explanation تفسير الحديث</div>
             </summary>
             <div class="quotes">
-                <p id="exp_en" class="quoteEnglish" lang="en">{{ hadith.hadithExplanationEnglish|e }}</p>
-                <p id="exp_ar" class="quoteArabic" lang="ar">{{ hadith.hadithExplanationArabic|e }}</p>
+                <p id="exp_en" class="quoteEnglish" lang="en">
+                    {% if hadith.hadithExplanationEnglish is not none %}
+                        {{ hadith.hadithExplanationEnglish|e }}
+                    {% else %}
+                        Explanation not found
+                    {% endif %}
+                </p>
+                <p id="exp_ar" class="quoteArabic" lang="ar">
+                    {% if hadith.hadithExplanationArabic is not none %}
+                        {{ hadith.hadithExplanationArabic|e }}
+                    {% else %}
+                        لا يوجد تفسير
+                    {% endif %}
+                </p>
             </div>
         </details>
 
