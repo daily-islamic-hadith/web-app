@@ -59,7 +59,7 @@ details summary::-webkit-details-marker {
 summary i {
     font-size: 1.2em;
     transition: transform 0.3s ease;
-    vertical-align: bottom;
+    vertical-align: text-bottom;
 }
 
 details[open] summary i {
