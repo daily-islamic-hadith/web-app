@@ -23,10 +23,10 @@ daily Hadith from the vast collections of Islamic traditions.
 
 ### Prerequisites
 
-Ensure you have Python installed on your system. You can check your Python version with:
+Ensure you have Python >= 3.10 installed on your system. You can check your Python version with:
 
 ```bash
-python --version
+python3 --version
 ```
 
 You should also have `pip` (Python package installer) available.
@@ -45,7 +45,7 @@ cd daily-islamic-hadith/server
 Create and activate a virtual environment to manage dependencies:
 
 ```bash
-python -m venv venv
+python3 -m venv venv
 source venv/bin/activate  # On Windows use `venv\Scripts\activate`
 ```
 
@@ -54,7 +54,8 @@ source venv/bin/activate  # On Windows use `venv\Scripts\activate`
 Install the necessary Python packages using `pip`:
 
 ```bash
-pip install -r requirements.txt
+pip install --upgrade pip       # upgrade it first
+pip install -r requirements.txt # install dependencies
 ```
 
 ## Usage
@@ -64,7 +65,7 @@ pip install -r requirements.txt
 After installing the dependencies, start the Flask application:
 
 ```bash
-flask run
+flask --app hadith_app run
 ```
 
 The app should now be running on `http://127.0.0.1:5000/`. You can visit this URL in your web browser to view the daily
