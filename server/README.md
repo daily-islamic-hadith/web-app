@@ -65,7 +65,7 @@ pip install -r requirements.txt # install dependencies
 After installing the dependencies, start the Flask application:
 
 ```bash
-flask --app hadith_app run
+flask --app server/hadith_app run
 ```
 
 The app should now be running on `http://127.0.0.1:5000/`. You can visit this URL in your web browser to view the daily
