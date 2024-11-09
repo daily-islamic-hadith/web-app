@@ -55,7 +55,7 @@ Install the necessary Python packages using `pip`:
 
 ```bash
 pip install --upgrade pip       # upgrade it first
-pip install -r requirements.txt # install dependencies
+pip install -r server/requirements.txt # install dependencies
 ```
 
 ## Usage
