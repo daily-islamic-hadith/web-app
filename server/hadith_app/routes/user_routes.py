@@ -69,6 +69,7 @@ def get_random_hadith():
 def fetch_hadith():
     fetch_mode_param = request.args.get('fetch-mode')  # mandatory
     lang_param = request.args.get("lang")  # optional
+    lang_param = lang_param.lower() if lang_param else None
     if lang_param and not is_supported_lang(lang_param.lower()):
         return jsonify(error='provided lang is not supported'), 400
     if not fetch_mode_param:
@@ -78,7 +79,7 @@ def fetch_hadith():
     except ValueError:
         logger.error(f"Invalid fetch mode {repr(fetch_mode_param)[:10]}")
         return jsonify(error='Invalid request fields'), 400
-    result = _try_get_hadith(hadith_fetch_mode, lang_param.lower())
+    result = _try_get_hadith(hadith_fetch_mode, lang_param)
     if result.get('hadith') is not None:
         return jsonify(result.get('hadith'))
     else:
