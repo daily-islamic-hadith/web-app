@@ -2,6 +2,7 @@ from flask import Flask
 
 from hadith_app.auth import auth_bp
 from hadith_app.auth.config import Config
+from hadith_app.util import AppJSONProvider
 from hadith_app.extensions import bcrypt
 from hadith_app.extensions import jwt
 from hadith_app.extensions import limiter
@@ -9,6 +10,7 @@ from hadith_app.extensions import limiter
 app = Flask(__name__)
 
 app.config.from_object(Config)
+app.json = AppJSONProvider(app)
 
 # init extensions
 bcrypt.init_app(app)
