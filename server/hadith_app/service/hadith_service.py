@@ -4,6 +4,7 @@ from random import randint
 from typing import Optional
 
 from hadith_app.dao import hadith_dao
+from hadith_app.language import AR, EN
 from hadith_app.models import HadithFetchMode, HadithMeta
 import logging
 import os
@@ -30,17 +31,17 @@ class HadithDto:
     hadithExplanationEnglish: Optional[str] = None
 
 
-def get_hadith_by_mode(hadith_fetch_mode):
+def get_hadith_by_mode(hadith_fetch_mode, hadith_lang_code):
     match hadith_fetch_mode:
         case HadithFetchMode.DAILY:
-            return get_today_hadith()
+            return get_today_hadith(hadith_lang_code)
         case HadithFetchMode.RANDOM:
-            return get_random_hadith()
+            return get_random_hadith(hadith_lang_code)
         case _:
             logger.error(f"Invalid fetch mode {hadith_fetch_mode}")
             return None
 
-def get_today_hadith():
+def get_today_hadith(hadith_lang_code):
     """
     Fetch today's hadith.
 
@@ -58,16 +59,17 @@ def get_today_hadith():
         hadith_row_number = get_hadith_number(today)
         hadith_meta = fetch_hadith_meta(hadith_row_number)
         CACHED_HADITH_META[today] = hadith_meta
-    return to_dto(hadith_meta)
+    #TODO pass lang_code to be filtered on db level
+    return to_dto(hadith_meta, hadith_lang_code)
 
 
-def get_random_hadith():
+def get_random_hadith(hadith_lang_code):
     hadith_row_number = get_random_hadith_number()
     hadith_meta = CACHED_HADITH_META.get(hadith_row_number)
     if hadith_meta is None:
         hadith_meta = fetch_hadith_meta(hadith_row_number)
         CACHED_HADITH_META[hadith_row_number] = hadith_meta
-    return to_dto(hadith_meta)
+    return to_dto(hadith_meta, hadith_lang_code)
 
 
 def delete_today_hadith():
@@ -147,12 +149,13 @@ def get_total_hadith_count():
     return CACHED_HADITH_DATA_SET_SIZE
 
 
-def to_dto(hadith_meta: HadithMeta) -> Optional[HadithDto]:
+def to_dto(hadith_meta: HadithMeta, hadith_lang_code: str) -> Optional[HadithDto]:
     """
     Convert a hadithMeta object to a HadithDto object.
 
     Args:
         hadith_meta (HadithMeta): A HadithMeta object
+        hadith_lang_code (str): Target hadith language
 
     Returns:
         Optional[HadithDto]: A HadithDto object if the input is not None, otherwise None.
@@ -165,10 +168,10 @@ def to_dto(hadith_meta: HadithMeta) -> Optional[HadithDto]:
     book = hadith_entity.get('book', {})
     return HadithDto(
         hadith_meta.reference,
-        hadith_entity.get('hadithArabic'),
-        hadith_entity.get('hadithEnglish'),
+        hadith_entity.get('hadithArabic') if hadith_lang_code is None or AR == hadith_lang_code else None,
+        hadith_entity.get('hadithEnglish') if hadith_lang_code is None or EN == hadith_lang_code else None,
         book.get('bookName'),
         book.get('writerName'),
-        hadith_meta.ar_explanation,
-        hadith_meta.en_explanation
+        hadith_meta.ar_explanation if hadith_lang_code is None or AR == hadith_lang_code else None,
+        hadith_meta.en_explanation if hadith_lang_code is None or EN == hadith_lang_code else None
     )
