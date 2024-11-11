@@ -31,7 +31,7 @@ class HadithDto:
     hadithExplanationEnglish: Optional[str] = None
 
 
-def get_hadith_by_mode(hadith_fetch_mode, hadith_lang_code):
+def get_hadith_by_mode(hadith_fetch_mode, hadith_lang_code: str|None):
     match hadith_fetch_mode:
         case HadithFetchMode.DAILY:
             return get_today_hadith(hadith_lang_code)

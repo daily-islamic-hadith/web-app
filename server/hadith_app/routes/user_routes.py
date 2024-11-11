@@ -87,7 +87,7 @@ def fetch_hadith():
 
 
 
-def _try_get_hadith(hadith_fetch_mode, lang_code):
+def _try_get_hadith(hadith_fetch_mode, lang_code: str|None):
     """
     Attempts to fetch the hadith given the input fetch mode.
 
