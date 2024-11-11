@@ -20,7 +20,7 @@ def index():
             dict: A dictionary containing either the hadith of the day or an error message,
                   along with the corresponding HTTP status code.
     """
-    result = _try_get_hadith(HadithFetchMode.DAILY)
+    result = _try_get_hadith(HadithFetchMode.DAILY, None)
     if result.get('hadith') is not None:
         return render_template("index.html", hadith=result.get('hadith'))
     else:
