@@ -12,7 +12,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet">
     <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/brands.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/solid.min.css">
     <!-- app styles -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
@@ -26,9 +27,9 @@
         </div>
         <details>
             <summary>
-                <div id="summary_en_title" class="quoteEnglish"><i class="fas fa-caret-down"></i> Explanation</div>
-                <div id="summary_ar_title" class="quoteArabic"><i class="fas fa-caret-down"></i> تفسير الحديث</div>
-                <div id="summary_mob_title"><i class="fas fa-caret-down"></i> Explanation تفسير الحديث</div>
+                <div id="summary_en_title" class="quoteEnglish"><i class="fa-solid fa-caret-down"></i> Explanation</div>
+                <div id="summary_ar_title" class="quoteArabic"><i class="fa-solid fa-caret-down"></i> تفسير الحديث</div>
+                <div id="summary_mob_title"><i class="fa-solid fa-caret-down"></i> Explanation تفسير الحديث</div>
             </summary>
             <div class="quotes">
                 <p id="exp_en" class="quoteEnglish" lang="en">
@@ -60,22 +61,22 @@
 {% if hadith is defined and hadith is not none %}
     <div class="button-group">
         <button id="copyButton" class="btn" aria-label="Copy Hadith to Clipboard">
-            <i class="fas fa-copy"></i>
+            <i class="fa-solid fa-copy"></i>
             <span>Copy</span>
         </button>
         <button id="showNewHadith" class="btn" aria-label="Get A New Hadith">
-            <i class="fas"></i>
+            <i class="fa-solid"></i>
             <span>Show Me a New Hadith</span>
         </button>
         <a id="chrome-btn" href="https://chrome.google.com/webstore/detail/jgofbnjkimhpkjeimcedipdeecegdkpp"
            target="_blank"
            class="btn">
-            <i class="fab fa-chrome"></i>
+            <i class="fa-brands fa-chrome"></i>
             <span>Add to Chrome</span>
         </a>
         <a id="firefox-btn" href="https://addons.mozilla.org/firefox/addon/daily-islamic-hadith" target="_blank"
            class="btn">
-            <i class="fab fa-firefox-browser"></i>
+            <i class="fa-brands fa-firefox-browser"></i>
             <span>Add to Firefox</span>
         </a>
     </div>
