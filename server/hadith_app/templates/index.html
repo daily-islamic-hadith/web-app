@@ -1,87 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <title>Daily Hadith الحديث اليومي</title>
-    <meta charset="UTF-8">
-    <meta name="description" content="Daily Islamic Hadith provides a new, authentic hadith each day in both Arabic and English,
+    <meta charset="UTF-8" />
+    <meta
+      name="description"
+      content="Daily Islamic Hadith provides a new, authentic hadith each day in both Arabic and English,
      offering direct access to the teachings of Prophet Muhammad (peace be upon him) for reflection and spiritual growth.
       Our site is dedicated to delivering verified hadiths from trusted sources without added commentary, making it an ideal platform for those seeking daily inspiration and a deeper connection to Islamic values.
-    Visit dailyislamichadith.com to experience the wisdom of the hadith in its original form.">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='icons/icon.png') }}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet">
+    Visit dailyislamichadith.com to experience the wisdom of the hadith in its original form."
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="{{ url_for('static', filename='icons/icon.png') }}"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Amiri&display=swap"
+      rel="stylesheet"
+    />
     <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/brands.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/solid.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/brands.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/solid.min.css"
+    />
     <!-- app styles -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
-<h1>Hadith Of The Day</h1>
-<div class="quote-container" role="main" aria-live="polite">
-    {% if hadith is defined and hadith is not none %}
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+  <body>
+    <h1>Hadith Of The Day</h1>
+    <div class="quote-container" role="main" aria-live="polite">
+      {% if hadith is defined and hadith is not none %}
+      <div class="quotes">
+        <p id="hadithEnglish" class="quoteEnglish">
+          {{ hadith.hadithEnglish|e }}
+        </p>
+        <p id="hadithArabic" class="quoteArabic" lang="ar">
+          {{ hadith.hadithArabic|e }}
+        </p>
+      </div>
+      <details>
+        <summary>
+          <div id="summary_en_title" class="quoteEnglish">
+            <i class="fa-solid fa-caret-down"></i> Explanation
+          </div>
+          <div id="summary_ar_title" class="quoteArabic">
+            <i class="fa-solid fa-caret-down"></i> تفسير الحديث
+          </div>
+          <div id="summary_mob_title">
+            <i class="fa-solid fa-caret-down"></i> Explanation تفسير الحديث
+          </div>
+        </summary>
         <div class="quotes">
-            <p id="hadithEnglish" class="quoteEnglish">{{ hadith.hadithEnglish|e }}</p>
-            <p id="hadithArabic" class="quoteArabic" lang="ar">{{ hadith.hadithArabic|e }}</p>
+          <p id="exp_en" class="quoteEnglish" lang="en">
+            {% if hadith.hadithExplanationEnglish is not none %} {{
+            hadith.hadithExplanationEnglish|e }} {% else %} Explanation not
+            found {% endif %}
+          </p>
+          <p id="exp_ar" class="quoteArabic" lang="ar">
+            {% if hadith.hadithExplanationArabic is not none %} {{
+            hadith.hadithExplanationArabic|e }} {% else %} لا يوجد تفسير {%
+            endif %}
+          </p>
         </div>
-        <details>
-            <summary>
-                <div id="summary_en_title" class="quoteEnglish"><i class="fa-solid fa-caret-down"></i> Explanation</div>
-                <div id="summary_ar_title" class="quoteArabic"><i class="fa-solid fa-caret-down"></i> تفسير الحديث</div>
-                <div id="summary_mob_title"><i class="fa-solid fa-caret-down"></i> Explanation تفسير الحديث</div>
-            </summary>
-            <div class="quotes">
-                <p id="exp_en" class="quoteEnglish" lang="en">
-                    {% if hadith.hadithExplanationEnglish is not none %}
-                        {{ hadith.hadithExplanationEnglish|e }}
-                    {% else %}
-                        Explanation not found
-                    {% endif %}
-                </p>
-                <p id="exp_ar" class="quoteArabic" lang="ar">
-                    {% if hadith.hadithExplanationArabic is not none %}
-                        {{ hadith.hadithExplanationArabic|e }}
-                    {% else %}
-                        لا يوجد تفسير
-                    {% endif %}
-                </p>
-            </div>
-        </details>
+      </details>
 
-        <p id="source">Source: {{ hadith.bookName|e }} by {{ hadith.bookWriterName|e }}</p>
-        <input id="reference" type="hidden" value="{{ hadith.reference }}"/>
-    {% else %}
-        <p id="hadithEnglish" class="quoteEnglish">{{ error|e }}</p>
-        <p id="hadithArabic" class="quoteArabic" lang="ar"></p>
-        <p id="source"></p>
-        <input id="reference" type="hidden" value=""/>
-    {% endif %}
-</div>
-{% if hadith is defined and hadith is not none %}
+      <p id="source">
+        Source: {{ hadith.bookName|e }} by {{ hadith.bookWriterName|e }}
+      </p>
+      <input id="reference" type="hidden" value="{{ hadith.reference }}" />
+      {% else %}
+      <p id="hadithEnglish" class="quoteEnglish">{{ error|e }}</p>
+      <p id="hadithArabic" class="quoteArabic" lang="ar"></p>
+      <p id="source"></p>
+      <input id="reference" type="hidden" value="" />
+      {% endif %}
+    </div>
+    {% if hadith is defined and hadith is not none %}
     <div class="button-group">
-        <button id="copyButton" class="btn" aria-label="Copy Hadith to Clipboard">
-            <i class="fa-solid fa-copy"></i>
-            <span>Copy</span>
-        </button>
-        <button id="showNewHadith" class="btn" aria-label="Get A New Hadith">
-            <i class="fa-solid"></i>
-            <span>Show Me a New Hadith</span>
-        </button>
-        <a id="chrome-btn" href="https://chrome.google.com/webstore/detail/jgofbnjkimhpkjeimcedipdeecegdkpp"
-           target="_blank"
-           class="btn">
-            <i class="fa-brands fa-chrome"></i>
-            <span>Add to Chrome</span>
-        </a>
-        <a id="firefox-btn" href="https://addons.mozilla.org/firefox/addon/daily-islamic-hadith" target="_blank"
-           class="btn">
-            <i class="fa-brands fa-firefox-browser"></i>
-            <span>Add to Firefox</span>
-        </a>
+      <button id="copyButton" class="btn" aria-label="Copy Hadith to Clipboard">
+        <i class="fa-solid fa-copy"></i>
+        <span>Copy</span>
+      </button>
+      <button id="showNewHadith" class="btn" aria-label="Get A New Hadith">
+        <i class="fa-solid"></i>
+        <span>Show Me a New Hadith</span>
+      </button>
+      <a
+        id="chrome-btn"
+        href="https://chrome.google.com/webstore/detail/jgofbnjkimhpkjeimcedipdeecegdkpp"
+        target="_blank"
+        class="btn"
+      >
+        <i class="fa-brands fa-chrome"></i>
+        <span>Add to Chrome</span>
+      </a>
+      <a
+        id="firefox-btn"
+        href="https://addons.mozilla.org/firefox/addon/daily-islamic-hadith"
+        target="_blank"
+        class="btn"
+      >
+        <i class="fa-brands fa-firefox-browser"></i>
+        <span>Add to Firefox</span>
+      </a>
     </div>
     <div id="notification">Hadith copied to clipboard!</div>
-{% endif %}
-<script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
-</body>
+    {% endif %}
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+  </body>
 </html>
