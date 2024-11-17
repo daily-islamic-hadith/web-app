@@ -127,7 +127,10 @@
         <span>Add to Firefox</span>
       </a>
     </div>
-    <div id="notification">Hadith copied to clipboard!</div>
+    <div id="enNotification" class="notification">
+      Hadith copied to clipboard!
+    </div>
+    <div id="arNotification" class="notification">تم نسخ الحديث</div>
     {% endif %}
     <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
   </body>

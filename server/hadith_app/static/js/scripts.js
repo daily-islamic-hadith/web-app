@@ -3,17 +3,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const ar_copy_button = document.querySelector('#arCopyButton');
   const en_copy_button = document.querySelector('#enCopyButton');
 
-  if (ar_copy_button) {
-    ar_copy_button.addEventListener('click', function () {
-      copyToClipboard('ar');
-    });
-  }
+  ar_copy_button?.addEventListener('click', function () {
+    copyToClipboard('ar');
+  });
 
-  if (en_copy_button) {
-    en_copy_button.addEventListener('click', function () {
-      copyToClipboard('en');
-    });
-  }
+  en_copy_button?.addEventListener('click', function () {
+    copyToClipboard('en');
+  });
 
   const show_new_hadith_button = document.querySelector('#showNewHadith');
   if (show_new_hadith_button) {
@@ -23,9 +19,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function fetchNewHadith() {
   const url = window.location.href + `/api/fetch-hadith?fetch-mode=random`;
+  const ar_copy_button = document.querySelector('#arCopyButton');
+  const en_copy_button = document.querySelector('#enCopyButton');
+
   try {
     const response = await fetch(url);
     const json_response = await response.json();
+
+    ar_copy_button.style.display = 'none';
+    en_copy_button.style.display = 'none';
     if (json_response) {
       if (response.ok) {
         const hadithEnglish =
@@ -48,6 +50,8 @@ async function fetchNewHadith() {
         document.getElementById('exp_ar').textContent = exp_ar
           ? exp_ar
           : 'لا يوجد تفسير';
+        ar_copy_button.style.display = 'flex';
+        en_copy_button.style.display = 'flex';
       } else {
         document.getElementById('hadithEnglish').textContent =
           json_response.error;
@@ -56,6 +60,8 @@ async function fetchNewHadith() {
         document.getElementById('reference').value = '';
         document.getElementById('exp_en').textContent = '';
         document.getElementById('exp_ar').textContent = '';
+        ar_copy_button.style.display = 'none';
+        en_copy_button.style.display = 'none';
       }
     } else {
       document.getElementById('hadithEnglish').textContent =
@@ -66,6 +72,8 @@ async function fetchNewHadith() {
       document.getElementById('reference').value = '';
       document.getElementById('exp_en').textContent = '';
       document.getElementById('exp_ar').textContent = '';
+      ar_copy_button.style.display = 'none';
+      en_copy_button.style.display = 'none';
     }
   } catch (error) {
     console.error('Failed to fetch the hadith:', error);
@@ -77,6 +85,8 @@ async function fetchNewHadith() {
     document.getElementById('reference').value = '';
     document.getElementById('exp_en').textContent = '';
     document.getElementById('exp_ar').textContent = '';
+    ar_copy_button.style.display = 'none';
+    en_copy_button.style.display = 'none';
   }
 }
 
@@ -101,8 +111,12 @@ function detectBrowser() {
 
 async function copyToClipboard(lang) {
   const textElementId = lang === 'ar' ? 'hadithArabic' : 'hadithEnglish';
+  const hadithExp = lang === 'ar' ? 'exp_ar' : 'exp_en';
+  const hadithTitle = lang === 'ar' ? 'التفسير' : ' Explanation';
+
   const textContent = document.getElementById(textElementId)?.textContent;
   const sourceContent = document.getElementById('source')?.textContent;
+  const hadithContent = document.getElementById(hadithExp)?.textContent;
 
   if (!textContent || !sourceContent) {
     console.error('Text or source content is missing. Cannot copy.');
@@ -110,20 +124,23 @@ async function copyToClipboard(lang) {
   }
 
   const currentURL = window.location.href;
-  const textToCopy = `${textContent}\n\n${sourceContent}\n\n${currentURL}`;
+  const textToCopy = `${textContent}\n\n${hadithTitle}\n\n${hadithContent}\n\n${sourceContent}\n\n${currentURL}`;
 
   try {
     await navigator.clipboard.writeText(textToCopy);
-    showNotification();
+    showNotification(lang);
   } catch (err) {
     console.error('Failed to copy text to clipboard:', err.message);
   }
 }
 
-function showNotification() {
-  const notification = document.getElementById('notification');
-  notification.className = 'show';
-  setTimeout(() => {
-    notification.className = notification.className.replace('show', '');
-  }, 3000);
+function showNotification(lang) {
+  const notification = document.getElementById(
+    lang === 'en' ? 'enNotification' : 'arNotification'
+  );
+
+  if (notification) {
+    notification.classList.add('show');
+    setTimeout(() => notification.classList.remove('show'), 3000);
+  }
 }
