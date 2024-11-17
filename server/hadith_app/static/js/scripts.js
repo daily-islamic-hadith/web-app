@@ -135,9 +135,10 @@ async function copyToClipboard(lang) {
 }
 
 function showNotification(lang) {
-  const notification = document.getElementById(
-    lang === 'en' ? 'enNotification' : 'arNotification'
-  );
+  const notification = document.getElementById('notification');
+
+  notification.textContent =
+    lang === 'en' ? 'Hadith copied to clipboard!' : '!تم نسخ الحديث';
 
   if (notification) {
     notification.classList.add('show');
