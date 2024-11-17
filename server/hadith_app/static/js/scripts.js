@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function fetchNewHadith() {
-  const url = window.location.href + `/api/festch-hadith?fetch-mode=random`;
+  const url = window.location.href + `/api/fetch-hadith?fetch-mode=random`;
   const ar_copy_button = document.querySelector('#arCopyButton');
   const en_copy_button = document.querySelector('#enCopyButton');
 
