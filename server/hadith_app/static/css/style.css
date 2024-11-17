@@ -197,7 +197,7 @@ details p {
   margin-right: 4px;
 }
 
-.notification {
+#notification {
   visibility: hidden;
   min-width: 250px;
   margin-left: -125px;
@@ -213,7 +213,7 @@ details p {
   font-size: 17px;
 }
 
-.notification.show {
+#notification.show {
   visibility: visible;
   animation: fadein 0.5s, fadeout 0.5s 2.5s;
 }
