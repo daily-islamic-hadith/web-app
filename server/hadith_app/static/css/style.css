@@ -41,6 +41,11 @@ h1 {
   font-style: italic;
 }
 
+.copy-container {
+  display: flex;
+  justify-content: space-between;
+}
+
 details summary {
   font-weight: bold;
   font-size: 1.2em;
@@ -182,9 +187,14 @@ details p {
   margin-right: 5px;
 }
 
-#copyButton,
+#arCopyButton,
+#enCopyButton,
 #showNewHadith {
   display: flex;
+}
+
+#arCopyButton span {
+  margin-right: 8px;
 }
 
 #notification {
@@ -239,5 +249,10 @@ details p {
   .button-group {
     flex-direction: column; /* Stack buttons vertically on small screens */
     gap: 15px;
+  }
+
+  #arCopyButton,
+  #enCopyButton {
+    display: none;
   }
 }

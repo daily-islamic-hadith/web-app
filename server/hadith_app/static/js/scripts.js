@@ -1,9 +1,20 @@
 document.addEventListener('DOMContentLoaded', () => {
   detectBrowser();
-  const copy_button = document.querySelector('#copyButton');
-  if (copy_button) {
-    copy_button.addEventListener('click', copyToClipboard);
+  const ar_copy_button = document.querySelector('#arCopyButton');
+  const en_copy_button = document.querySelector('#enCopyButton');
+
+  if (ar_copy_button) {
+    ar_copy_button.addEventListener('click', function () {
+      copyToClipboard('ar');
+    });
   }
+
+  if (en_copy_button) {
+    en_copy_button.addEventListener('click', function () {
+      copyToClipboard('en');
+    });
+  }
+
   const show_new_hadith_button = document.querySelector('#showNewHadith');
   if (show_new_hadith_button) {
     show_new_hadith_button.addEventListener('click', fetchNewHadith);
@@ -37,9 +48,6 @@ async function fetchNewHadith() {
         document.getElementById('exp_ar').textContent = exp_ar
           ? exp_ar
           : 'لا يوجد تفسير';
-
-        // Show the copy button after successful fetch
-        document.getElementById('copyButton').style.display = 'flex';
       } else {
         document.getElementById('hadithEnglish').textContent =
           json_response.error;
@@ -91,17 +99,24 @@ function detectBrowser() {
   }
 }
 
-async function copyToClipboard() {
-  const hadithEnglish = document.getElementById('hadithEnglish').textContent;
-  const hadithArabic = document.getElementById('hadithArabic').textContent;
-  const source = document.getElementById('source').textContent;
-  const textToCopy = `${hadithEnglish}\n\n${hadithArabic}\n\n${source}`;
+async function copyToClipboard(lang) {
+  const textElementId = lang === 'ar' ? 'hadithArabic' : 'hadithEnglish';
+  const textContent = document.getElementById(textElementId)?.textContent;
+  const sourceContent = document.getElementById('source')?.textContent;
+
+  if (!textContent || !sourceContent) {
+    console.error('Text or source content is missing. Cannot copy.');
+    return;
+  }
+
+  const currentURL = window.location.href;
+  const textToCopy = `${textContent}\n\n${sourceContent}\n\n${currentURL}`;
 
   try {
     await navigator.clipboard.writeText(textToCopy);
     showNotification();
   } catch (err) {
-    console.error('Failed to copy text: ', err);
+    console.error('Failed to copy text to clipboard:', err.message);
   }
 }
 
