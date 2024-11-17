@@ -73,7 +73,24 @@
           </p>
         </div>
       </details>
-
+      <div class="copy-container">
+        <button
+          id="enCopyButton"
+          class="btn"
+          aria-label="Copy Hadith to Clipboard"
+        >
+          <i class="fa-solid fa-copy"></i>
+          <span>Copy</span>
+        </button>
+        <button
+          id="arCopyButton"
+          class="btn"
+          aria-label="Copy Hadith to Clipboard"
+        >
+          <span>نسخ</span>
+          <i class="fa-solid fa-copy"></i>
+        </button>
+      </div>
       <p id="source">
         Source: {{ hadith.bookName|e }} by {{ hadith.bookWriterName|e }}
       </p>
@@ -87,10 +104,6 @@
     </div>
     {% if hadith is defined and hadith is not none %}
     <div class="button-group">
-      <button id="copyButton" class="btn" aria-label="Copy Hadith to Clipboard">
-        <i class="fa-solid fa-copy"></i>
-        <span>Copy</span>
-      </button>
       <button id="showNewHadith" class="btn" aria-label="Get A New Hadith">
         <i class="fa-solid"></i>
         <span>Show Me a New Hadith</span>
