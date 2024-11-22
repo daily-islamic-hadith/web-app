@@ -18,7 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function fetchNewHadith() {
-  const url = `${window.location.href}/api/fetch-hadith?fetch-mode=random`;
+  const urlPrefix = window.location.origin + window.location.pathname;
+  const url = `${urlPrefix}/api/fetch-hadith?fetch-mode=random`;
   const arCopyButton = document.querySelector('#arCopyButton');
   const enCopyButton = document.querySelector('#enCopyButton');
 
@@ -116,7 +117,7 @@ async function copyToClipboard(lang) {
     return;
   }
 
-  const currentURL = window.location.href;
+  const currentURL = window.location.origin + window.location.pathname;
   const textToCopy = `${hadithContent}\n\n${expTitle}\n\n${expContent}\n\n${sourceContent}\n\n${currentURL}`;
 
   try {
