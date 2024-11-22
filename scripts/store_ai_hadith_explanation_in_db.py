@@ -111,7 +111,7 @@ def fetch_hadith_explanation(hadith_txt):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Fetch and Store Hadith explanations.")
     parser.add_argument('database_url', help="database url")
-    parser.add_argument('items_per_thread', help="number of items to be processed within a single thread")
+    parser.add_argument('items_per_thread', type=int, help="number of items to be processed within a single thread")
 
     args = parser.parse_args()
     fetch_and_store_hadith_explanation(args.database_url, args.items_per_thread)
