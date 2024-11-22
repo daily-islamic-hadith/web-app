@@ -7,19 +7,19 @@ body {
   height: 100vh;
   background-color: #f0f0f0;
   margin: 0;
-  padding: 0 20px;
+  padding: 0 1rem;
 }
 
 h1 {
-  margin-bottom: 20px;
+  margin-bottom: 1rem;
 }
 
 .quote-container {
   text-align: center;
   background: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.1);
   max-width: 600px;
   max-height: 80vh;
   overflow-y: auto;
@@ -128,17 +128,17 @@ details p {
   .quoteEnglish {
     flex: 1;
     text-align: left;
-    margin-right: 20px;
+    margin-right: 1rem;
   }
   .quoteArabic {
     flex: 1;
     text-align: right;
     direction: rtl;
-    margin-left: 20px;
+    margin-left: 1rem;
   }
   #source {
     text-align: center;
-    margin-top: 20px;
+    margin-top: 1rem;
   }
 
   details summary {
@@ -158,10 +158,10 @@ details p {
 
 .button-group {
   display: flex;
-  gap: 10px; /* Space between buttons */
+  gap: 0.5rem; /* Space between buttons */
   justify-content: center;
   align-items: center;
-  margin-top: 20px;
+  margin-top: 1rem;
 }
 
 .btn {
@@ -170,8 +170,8 @@ details p {
   align-items: center;
   justify-content: center;
   text-decoration: none;
-  padding: 10px 20px;
-  border-radius: 8px; /* Rounded corners */
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem; /* Rounded corners */
   border: none;
   color: #ffff;
   font-size: 1.2rem; /* Icon size */
@@ -184,7 +184,7 @@ details p {
 }
 
 .btn i {
-  margin-right: 5px;
+  margin-right: 0.25rem;
 }
 
 #arCopyButton,
@@ -194,7 +194,7 @@ details p {
 }
 
 #arCopyButton span {
-  margin-right: 4px;
+  margin-right: 0.25rem;
 }
 
 #notification {
@@ -204,8 +204,8 @@ details p {
   background-color: #3c3535;
   color: #fff;
   text-align: center;
-  border-radius: 10px;
-  padding: 16px;
+  border-radius: 0.5rem;
+  padding: 1rem;
   position: fixed;
   z-index: 1;
   left: 50%;
@@ -244,11 +244,11 @@ details p {
 @media (max-width: 768px) {
   .btn {
     font-size: 1.2rem;
-    padding: 8px 16px;
+    padding: 0.5rem 1rem;
   }
   .button-group {
     flex-direction: column; /* Stack buttons vertically on small screens */
-    gap: 15px;
+    gap: 1rem;
   }
 
   #arCopyButton,
