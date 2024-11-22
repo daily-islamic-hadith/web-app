@@ -116,6 +116,10 @@ details p {
   content: '\f0d7';
 }
 
+.fa-eye::before {
+  content: "\f06e";
+}
+
 @media (min-width: 768px) {
   .quote-container {
     text-align: left;
