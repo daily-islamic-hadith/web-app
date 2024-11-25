@@ -4,6 +4,7 @@ from random import randint
 from typing import Optional
 
 from hadith_app.dao import hadith_dao
+from hadith_app.service import explanation_store
 from hadith_app.language import AR, EN
 from hadith_app.models import HadithFetchMode, HadithMeta
 import logging
@@ -62,7 +63,6 @@ def get_today_hadith(hadith_lang_code):
     #TODO pass lang_code to be filtered on db level
     return to_dto(hadith_meta, hadith_lang_code)
 
-
 def get_random_hadith(hadith_lang_code):
     hadith_row_number = get_random_hadith_number()
     hadith_meta = CACHED_HADITH_META.get(hadith_row_number)
@@ -70,7 +70,6 @@ def get_random_hadith(hadith_lang_code):
         hadith_meta = fetch_hadith_meta(hadith_row_number)
         CACHED_HADITH_META[hadith_row_number] = hadith_meta
     return to_dto(hadith_meta, hadith_lang_code)
-
 
 def delete_today_hadith():
     global CACHED_HADITH_DATA_SET_SIZE
@@ -85,6 +84,25 @@ def delete_today_hadith():
         CACHED_HADITH_DATA_SET_SIZE = -1
     return deleted
 
+
+def generate_new_hadith_explanation(hadith_reference: str):
+    hadith_content = fetch_hadith_content(hadith_reference, AR)
+    explanation = explanation_store.fetch_hadith_explanation(hadith_content)
+    if explanation is None:
+        return None
+    return hadith_dao.update_hadith_explanation(hadith_reference, explanation.get(AR), explanation.get(EN))
+
+
+def fetch_hadith_content(hadith_reference: str, hadith_lang_code: str):
+    try:
+        hadith_json = hadith_dao.get_hadith_content(hadith_reference)
+        if hadith_json is None:
+            return None
+        return hadith_json.get('hadithArabic') if AR == hadith_lang_code else hadith_json.get('hadithEnglish')
+    except Exception as e:
+        logger.error(
+            f"Error fetching hadith content for reference {hadith_reference} and language {hadith_lang_code}: {e}")
+        raise
 
 def fetch_hadith_meta(hadith_row_number):
     """
@@ -109,15 +127,12 @@ def fetch_hadith_meta(hadith_row_number):
         logger.error(f"Error fetching hadith metadata: {e}")
         raise
 
-
 def get_random_hadith_number():
     try:
         return randint(0, get_total_hadith_count())
     except Exception as e:
         logger.error(f"Error calculating random hadith number: {e}")
         raise
-
-
 
 def get_hadith_number(target_date):
     """
@@ -140,7 +155,6 @@ def get_hadith_number(target_date):
     except Exception as e:
         logger.error(f"Error calculating hadith number for date {target_date}: {e}")
         raise
-
 
 def get_total_hadith_count():
     global CACHED_HADITH_DATA_SET_SIZE

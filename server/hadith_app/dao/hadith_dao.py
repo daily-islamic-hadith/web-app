@@ -85,6 +85,38 @@ def delete_hadith_meta(reference):
         db.close_connection()
 
 
+def get_hadith_content(hadith_reference):
+    db.connect()
+    try:
+        result = db.execute_read_query("SELECT hadith_obj FROM hadith_meta where reference=?;", (hadith_reference,))
+        if result:
+            blob_data = result[0][0]
+            return json.loads(blob_data.decode('utf-8')) if isinstance(blob_data, bytes) else blob_data
+        else:
+            logger.info(f"No hadith found for reference {hadith_reference}")
+            return None
+    except Exception as e:
+        logger.error(f"Error getting hadith content : {e}")
+        raise
+    finally:
+        db.close_connection()
+
+def update_hadith_explanation(hadith_reference, explanation_ar, explanation_en):
+    if explanation_ar is None or explanation_en is None or hadith_reference is None:
+        return None
+    db.connect()
+    try:
+        exp_ar_encoded = explanation_ar.encode('utf-8')
+        exp_en_encoded = explanation_en.encode('utf-8')
+        result = db.execute_modify_query("UPDATE hadith_explanation SET exp_ar=?, exp_en=? WHERE hadith_ref=?;",
+                                         (exp_ar_encoded, exp_en_encoded, hadith_reference))
+        return result
+    except Exception as e:
+        logger.error(f"Error updating hadith explanation : {e}")
+        raise
+    finally:
+        db.close_connection()
+
 def bind_to_hadith_meta(db_row_result):
     if db_row_result:
         blob_data = db_row_result[1]
