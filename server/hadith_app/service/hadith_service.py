@@ -90,7 +90,10 @@ def generate_new_hadith_explanation(hadith_reference: str):
     explanation = explanation_store.fetch_hadith_explanation(hadith_content)
     if explanation is None:
         return None
-    return hadith_dao.update_hadith_explanation(hadith_reference, explanation.get(AR), explanation.get(EN))
+    generated = hadith_dao.update_hadith_explanation(hadith_reference, explanation.get(AR), explanation.get(EN))
+    if generated:
+        remove_cached_hadith_by_reference(hadith_reference)
+    return generated
 
 
 def fetch_hadith_content(hadith_reference: str, hadith_lang_code: str):
@@ -161,6 +164,19 @@ def get_total_hadith_count():
     if CACHED_HADITH_DATA_SET_SIZE < 0:
         CACHED_HADITH_DATA_SET_SIZE = hadith_dao.get_total_hadith_count()
     return CACHED_HADITH_DATA_SET_SIZE
+
+
+def remove_cached_hadith_by_reference(target_reference: str):
+    """
+    Remove hadith from cache by its reference
+
+    Args:
+        target_reference: Hadith reference to remove from cache
+    """
+    keys_to_remove = [k for k, v in CACHED_HADITH_META.items() if v.reference == target_reference]
+    if keys_to_remove:
+        for key in keys_to_remove:
+            CACHED_HADITH_META.pop(key)
 
 
 def to_dto(hadith_meta: HadithMeta, hadith_lang_code: str) -> Optional[HadithDto]:
