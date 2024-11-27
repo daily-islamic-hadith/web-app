@@ -49,9 +49,9 @@ def _do_process(db_url, rows):
                 blob_data = json.loads(blob_data.decode('utf-8'))
             hadith_txt = blob_data.get('hadithArabic')
             explanation = fetch_hadith_explanation(hadith_txt)
-            exp_ar = explanation.get('ar').encode('utf-8')
-            exp_en = explanation.get('en').encode('utf-8')
             if explanation:
+                exp_ar = explanation.get('ar').encode('utf-8')
+                exp_en = explanation.get('en').encode('utf-8')
                 cursor.execute("insert into hadith_explanation (hadith_ref, exp_ar, exp_en) values (%s,%s,%s)",
                                (reference, exp_ar, exp_en))
             else:
