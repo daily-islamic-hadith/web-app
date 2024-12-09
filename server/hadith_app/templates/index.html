@@ -50,15 +50,18 @@
       </div>
       <details>
         <summary>
-          <div id="summary_en_title" class="quoteEnglish">
-            <i class="fa-solid fa-caret-down"></i> Explanation
-          </div>
-          <div id="summary_ar_title" class="quoteArabic">
-            <i class="fa-solid fa-caret-down"></i> تفسير الحديث
-          </div>
-          <div id="summary_mob_title">
-            <i class="fa-solid fa-caret-down"></i> Explanation تفسير الحديث
-          </div>
+            {% if ua is defined and ua.is_mobile %}
+            <div id="summary_mob_title">
+                <i class="fa-solid fa-caret-down"></i> Explanation تفسير الحديث
+            </div>
+            {% else %}
+            <div id="summary_en_title" class="quoteEnglish">
+                <i class="fa-solid fa-caret-down"></i> Explanation
+            </div>
+            <div id="summary_ar_title" class="quoteArabic">
+                <i class="fa-solid fa-caret-down"></i> تفسير الحديث
+            </div>
+            {% endif %}
         </summary>
         <div class="quotes">
           <p id="exp_en" class="quoteEnglish" lang="en">
@@ -73,6 +76,7 @@
           </p>
         </div>
       </details>
+      {% if ua is defined and not ua.is_mobile %}
       <div class="copy-container">
         <button
           id="enCopyButton"
@@ -91,6 +95,8 @@
           <i class="fa-solid fa-copy"></i>
         </button>
       </div>
+      <div id="notification">Hadith copied to clipboard!</div>
+      {% endif %}
       <p id="source">
         Source: {{ hadith.bookName|e }} by {{ hadith.bookWriterName|e }}
       </p>
@@ -108,6 +114,8 @@
         <i class="fa-solid fa-eye"></i>
         <span>Show Me a New Hadith</span>
       </button>
+      {% if ua is defined and ua.is_pc %}
+      {% if ua.browser.family == "Chrome" %}
       <a
         id="chrome-btn"
         href="https://chrome.google.com/webstore/detail/jgofbnjkimhpkjeimcedipdeecegdkpp"
@@ -117,6 +125,8 @@
         <i class="fa-brands fa-chrome"></i>
         <span>Add to Chrome</span>
       </a>
+      {% endif %}
+      {% if ua.browser.family == "Firefox" %}
       <a
         id="firefox-btn"
         href="https://addons.mozilla.org/firefox/addon/daily-islamic-hadith"
@@ -126,8 +136,9 @@
         <i class="fa-brands fa-firefox-browser"></i>
         <span>Add to Firefox</span>
       </a>
+      {% endif %}
+      {% endif %}
     </div>
-    <div id="notification">Hadith copied to clipboard!</div>
     {% endif %}
     <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
   </body>

@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-  detectBrowser();
   const ar_copy_button = document.querySelector('#arCopyButton');
   const en_copy_button = document.querySelector('#enCopyButton');
 
@@ -34,8 +33,12 @@ async function fetchNewHadith() {
 
   const displayCopyButtons = (visible) => {
     const displayValue = visible ? 'flex' : 'none';
-    arCopyButton.style.display = displayValue;
-    enCopyButton.style.display = displayValue;
+    if (arCopyButton) {
+      arCopyButton.style.display = displayValue;
+    }
+    if (enCopyButton) {
+      enCopyButton.style.display = displayValue;
+    }
   };
 
   const setHadithContent = ({
@@ -81,25 +84,6 @@ async function fetchNewHadith() {
       'Failed to fetch hadith. Please try again later.',
       'حدث خطأ ما. يرجى المحاولة مرة أخرى في وقت لاحق.'
     );
-  }
-}
-
-function detectBrowser() {
-  const userAgent = navigator.userAgent;
-  const isMobileOrTablet = /Mobi|Android|iPhone|iPad|Tablet|Mobile/i.test(
-    userAgent
-  );
-
-  if (!isMobileOrTablet) {
-    if (
-      userAgent.includes('Chrome') &&
-      !userAgent.includes('Edg') &&
-      !userAgent.includes('OPR')
-    ) {
-      document.getElementById('chrome-btn').style.display = 'inline-block';
-    } else if (userAgent.includes('Firefox')) {
-      document.getElementById('firefox-btn').style.display = 'inline-block';
-    }
   }
 }
 
