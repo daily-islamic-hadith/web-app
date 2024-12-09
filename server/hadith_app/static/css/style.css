@@ -149,6 +149,8 @@ details p {
 
 #arCopyButton,
 #enCopyButton,
+#firefox-btn,
+#chrome-btn,
 #showNewHadith {
   display: flex;
 }

@@ -5,6 +5,7 @@ from hadith_app.language import is_supported_lang
 from hadith_app.service.hadith_service import get_hadith_by_mode
 from hadith_app.models import HadithFetchMode
 import logging
+import user_agents
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -22,9 +23,16 @@ def index():
     """
     result = _try_get_hadith(HadithFetchMode.DAILY, None)
     if result.get('hadith') is not None:
-        return render_template("index.html", hadith=result.get('hadith'))
+        return render_template("index.html",
+                               hadith=result.get('hadith'),
+                               ua=get_user_agent(request))
     else:
         return render_template("index.html", error=result.get('error')), result.get('status_code')
+
+
+def get_user_agent(r: request):
+    user_agent = r.headers.get('User-Agent')
+    return user_agents.parse(user_agent)
 
 
 @app.route('/privacy-policy')
