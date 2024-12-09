@@ -8,3 +8,4 @@ marshmallow==3.23.0
 Flask-Limiter==3.8.0
 iso639==0.1.4
 openai==1.53.0
+user-agents==2.2.0
