@@ -1,15 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
+  const applyDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  applyTheme(applyDarkMode);
   const ar_copy_button = document.querySelector('#arCopyButton');
   const en_copy_button = document.querySelector('#enCopyButton');
-
+  const displayBtnMode = document.querySelector('#displayModeBtn');
+  displayBtnMode?.addEventListener('click', function () {
+    applyTheme(!document.documentElement.classList.contains('dark'));
+  });
   ar_copy_button?.addEventListener('click', function () {
     copyToClipboard('ar');
   });
-
   en_copy_button?.addEventListener('click', function () {
     copyToClipboard('en');
   });
-
   const show_new_hadith_button = document.querySelector('#showNewHadith');
   if (show_new_hadith_button) {
     show_new_hadith_button.addEventListener('click', fetchNewHadith);
@@ -121,5 +124,22 @@ function showNotification(lang) {
   if (notification) {
     notification.classList.add('show');
     setTimeout(() => notification.classList.remove('show'), 3000);
+  }
+}
+
+function applyTheme(darkMode) {
+  const displayModeBtn = document.querySelector("#displayModeBtn");
+  if (darkMode) {
+    document.documentElement.classList.remove('light');
+    document.documentElement.classList.add('dark');
+    displayModeBtn.title = "Switch to Light Mode";
+    displayModeBtn.classList.remove('fa-moon');
+    displayModeBtn.classList.add('fa-sun');
+  } else {
+    document.documentElement.classList.remove('dark');
+    document.documentElement.classList.add('light');
+    displayModeBtn.title = "Switch to Dark Mode";
+    displayModeBtn.classList.remove('fa-sun');
+    displayModeBtn.classList.add('fa-moon');
   }
 }
