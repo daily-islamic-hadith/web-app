@@ -222,6 +222,20 @@ details p {
   min-width: 9.375rem;
 }
 
+footer {
+  background-color: var(--body-bg-color);
+  color: var(--txt-color);
+  text-align: center;
+  padding: 1.5rem 0;
+  position: relative;
+  bottom: 0;
+  width: 100%;
+  font-size: 1rem;
+}
+footer p {
+  margin: 0;
+}
+
 #notification {
   visibility: hidden;
   min-width: 250px;
