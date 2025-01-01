@@ -1,3 +1,4 @@
+from datetime import date
 from flask import jsonify, request, render_template, send_from_directory
 from flask_cors import cross_origin
 from hadith_app import app
@@ -25,7 +26,8 @@ def index():
     if result.get('hadith') is not None:
         return render_template("index.html",
                                hadith=result.get('hadith'),
-                               ua=get_user_agent(request))
+                               ua=get_user_agent(request),
+                               copyright_year = date.today().year)
     else:
         return render_template("index.html", error=result.get('error')), result.get('status_code')
 
