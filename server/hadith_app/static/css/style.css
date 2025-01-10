@@ -171,6 +171,9 @@ details p {
 .fa-moon::before {
   content: "\f186";
 }
+.fa-circle-chevron-left::before {
+  content: "\f137";
+}
 
 .button-group {
   display: flex;
@@ -216,6 +219,7 @@ details p {
 }
 
 #showNewHadith,
+#backToHome,
 #firefox-btn,
 #chrome-btn {
   display: inline-flex;

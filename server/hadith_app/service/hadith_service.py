@@ -42,6 +42,15 @@ def get_hadith_by_mode(hadith_fetch_mode, hadith_lang_code: str|None):
             logger.error(f"Invalid fetch mode {hadith_fetch_mode}")
             return None
 
+def get_hadith_by_reference(hadith_reference: str):
+    if hadith_reference is None:
+        return None
+    hadith_meta = CACHED_HADITH_META.get(hadith_reference)
+    if hadith_meta is None:
+        hadith_meta = hadith_dao.get_hadith_meta_by_reference(hadith_reference)
+        CACHED_HADITH_META[hadith_reference] = hadith_meta
+    return to_dto(hadith_meta, None)
+
 def get_today_hadith(hadith_lang_code):
     """
     Fetch today's hadith.
@@ -107,7 +116,8 @@ def fetch_hadith_content(hadith_reference: str, hadith_lang_code: str):
             f"Error fetching hadith content for reference {hadith_reference} and language {hadith_lang_code}: {e}")
         raise
 
-def fetch_hadith_meta(hadith_row_number):
+
+def fetch_hadith_meta(hadith_row_number: int):
     """
     Fetch the metadata for a specific hadith from the database.
 
@@ -179,7 +189,7 @@ def remove_cached_hadith_by_reference(target_reference: str):
             CACHED_HADITH_META.pop(key)
 
 
-def to_dto(hadith_meta: HadithMeta, hadith_lang_code: str) -> Optional[HadithDto]:
+def to_dto(hadith_meta: HadithMeta, hadith_lang_code: str|None) -> Optional[HadithDto]:
     """
     Convert a hadithMeta object to a HadithDto object.
 

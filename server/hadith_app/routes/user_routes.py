@@ -1,12 +1,11 @@
-from datetime import date
-from flask import jsonify, request, render_template, send_from_directory
+from flask import jsonify, request, send_from_directory
 from flask_cors import cross_origin
 from hadith_app import app
 from hadith_app.language import is_supported_lang
-from hadith_app.service.hadith_service import get_hadith_by_mode
+from hadith_app.service.hadith_service import get_hadith_by_mode, get_hadith_by_reference
 from hadith_app.models import HadithFetchMode
+from hadith_app.routes.helper.response_helper import get_template_response, handle_fetch_hadith_success, handle_fetch_hadith_error
 import logging
-import user_agents
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -23,18 +22,16 @@ def index():
                   along with the corresponding HTTP status code.
     """
     result = _try_get_hadith(HadithFetchMode.DAILY, None)
-    if result.get('hadith') is not None:
-        return render_template("index.html",
-                               hadith=result.get('hadith'),
-                               ua=get_user_agent(request),
-                               copyright_year = date.today().year)
-    else:
-        return render_template("index.html", error=result.get('error')), result.get('status_code')
+    return get_template_response(request, result, True)
 
-
-def get_user_agent(r: request):
-    user_agent = r.headers.get('User-Agent')
-    return user_agents.parse(user_agent)
+@app.route('/hadith/<hadith_reference>')
+def hadith(hadith_reference):
+    try:
+        hadith_by_reference = get_hadith_by_reference(hadith_reference)
+        result = handle_fetch_hadith_success(hadith_by_reference)
+    except Exception as e:
+        result = handle_fetch_hadith_error(e)
+    return get_template_response(request, result, False)
 
 
 @app.route('/privacy-policy')
@@ -96,34 +93,24 @@ def fetch_hadith():
         return jsonify(error=result.get('error')), result.get('status_code')
 
 
-
-def _try_get_hadith(hadith_fetch_mode, lang_code: str|None):
+def _try_get_hadith(hadith_fetch_mode, lang_code: str | None):
     """
-    Attempts to fetch the hadith given the input fetch mode.
+    Helper function to fetch a hadith based on the specified mode and language.
 
-    This function wraps the `get_hadith_by_mode()` call with error handling.
-    It catches various exceptions that might occur during the process and
-    returns appropriate error messages and status codes.
+    This function attempts to fetch a hadith using the get_hadith_by_mode() function with the provided
+    fetch mode and language code. If successful, it processes the result through _handle_fetch_hadith_success().
+    If an error occurs, it processes the error through _handle_fetch_hadith_error().
+
+    Args:
+        hadith_fetch_mode (HadithFetchMode): The mode to use when fetching the hadith (DAILY or RANDOM).
+        lang_code (str | None): Optional language code for the hadith translation.
 
     Returns:
-        dict: A dictionary containing either the hadith of the day or an error message,
-              along with the corresponding HTTP status code.
+        dict: A dictionary containing either the hadith data and status code on success,
+              or an error message and status code on failure.
     """
     try:
         hadith = get_hadith_by_mode(hadith_fetch_mode, lang_code)
-        if hadith is not None:
-            return {"hadith": hadith, "status_code": 200}
-        return {"error": "Hadith not found", "status_code": 404}
-    except ValueError as ve:
-        logger.error(f"Value error: {ve}")
-        error_message = "Something went wrong"
-        status_code = 400
-    except KeyError as ke:
-        logger.error(f"Key error: {ke}")
-        error_message = "Hadith not found"
-        status_code = 404
+        return handle_fetch_hadith_success(hadith)
     except Exception as e:
-        logger.error(f"Error fetching hadith by mode {hadith_fetch_mode}: {e}")
-        error_message = "Something went wrong. Please try again later."
-        status_code = 500
-    return {"error": error_message, "status_code": status_code}
+        return handle_fetch_hadith_error(e)

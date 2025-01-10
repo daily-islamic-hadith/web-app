@@ -108,10 +108,22 @@
     </div>
     {% if hadith is defined and hadith is not none %}
     <div class="button-group">
+      {% if home_page is defined and home_page %}
       <button id="showNewHadith" class="btn" aria-label="Get A New Hadith">
         <i class="fa-solid fa-eye"></i>
         <span>Show Me a New Hadith</span>
       </button>
+      {% else %}
+      <a
+         id="backToHome"
+         class="btn"
+         aria-label="Back To Home Page"
+         href="{{ url_for('index') }}"
+      >
+        <i class="fa-solid fa-circle-chevron-left"></i>
+        <span>Back To Home</span>
+      </a>
+      {% endif %}
       {% if ua is defined and ua.is_pc %}
       {% if ua.browser.family == "Chrome" %}
       <a
