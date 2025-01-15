@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function fetchNewHadith() {
-  const urlPrefix = window.location.origin + window.location.pathname;
+  const urlPrefix = window.location.origin;
   const url = `${urlPrefix}/api/fetch-hadith?fetch-mode=random`;
   const arCopyButton = document.querySelector('#arCopyButton');
   const enCopyButton = document.querySelector('#enCopyButton');
@@ -103,9 +103,8 @@ async function copyToClipboard(lang) {
     console.error('Text or source content is missing. Cannot copy.');
     return;
   }
-
-  const currentURL = window.location.origin + window.location.pathname;
-  const textToCopy = `${hadithContent}\n\n${expTitle}\n\n${expContent}\n\n${sourceContent}\n\n${currentURL}`;
+  const hadithPageUrl = window.location.origin + '/hadith/' + document.getElementById('reference').value;
+  const textToCopy = `${hadithContent}\n\n${expTitle}\n\n${expContent}\n\n${sourceContent}\n\n${hadithPageUrl}`;
 
   try {
     await navigator.clipboard.writeText(textToCopy);

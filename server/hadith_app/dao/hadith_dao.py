@@ -8,7 +8,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-def get_hadith_meta(row_number):
+def get_hadith_meta(row_number: int):
     """
     Fetches metadata for a specific Hadith from the database.
 
@@ -42,6 +42,38 @@ def get_hadith_meta(row_number):
             return None
     except Exception as e:
         logger.error(f"Error fetching hadith meta: {e}")
+        raise
+    finally:
+        db.close_connection()
+
+
+def get_hadith_meta_by_reference(hadith_reference: str):
+    """
+    Executes a SQL query to fetch a Hadith's metadata and explanations by its reference.
+
+    The query joins the hadith_meta and hadith_explanation tables to retrieve the Hadith's
+    reference, object data, and both Arabic and English explanations. The join is performed
+    using the reference as the matching key between tables.
+
+    Parameters:
+    hadith_reference (str): The reference identifier of the Hadith to fetch.
+
+    Returns:
+    result: The query result containing the Hadith metadata and explanations.
+    """
+    db.connect()
+    try:
+        result = db.execute_read_query(
+            "SELECT reference, hadith_obj, exp_ar, exp_en FROM hadith_meta "
+            "left join hadith_explanation on hadith_meta.reference = hadith_explanation.hadith_ref "
+            "where reference=?;",
+            (hadith_reference,))
+        if result:
+            return bind_to_hadith_meta(result[0])
+        else:
+            return None
+    except Exception as e:
+        logger.error(f"Error fetching hadith meta by reference: {e}")
         raise
     finally:
         db.close_connection()
