@@ -22,7 +22,24 @@ def index():
                   along with the corresponding HTTP status code.
     """
     result = _try_get_hadith(HadithFetchMode.DAILY, None)
-    return get_template_response(request, result, True)
+    render_metadata = {
+        "home_page": True,
+    }
+    return get_template_response(request, result, render_metadata)
+
+
+@app.route('/<lang_code>')
+def index_by_language(lang_code):
+    if not lang_code or not is_supported_lang(lang_code.lower()):
+        result = {"error": 'provided lang is not supported', "status_code": 404}
+    else:
+        result = _try_get_hadith(HadithFetchMode.DAILY, lang_code)
+    render_metadata = {
+        "home_page": True,
+        "language_page": lang_code
+    }
+    return get_template_response(request, result, render_metadata)
+
 
 @app.route('/hadith/<hadith_reference>')
 def hadith(hadith_reference):
@@ -31,7 +48,10 @@ def hadith(hadith_reference):
         result = handle_fetch_hadith_success(hadith_by_reference)
     except Exception as e:
         result = handle_fetch_hadith_error(e)
-    return get_template_response(request, result, False)
+    render_metadata = {
+        "home_page": False,
+    }
+    return get_template_response(request, result, render_metadata)
 
 
 @app.route('/privacy-policy')

@@ -1,13 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Daily Hadith الحديث اليومي</title>
+    <title>
+        {% if language_page is defined %}
+            {% if language_page == 'ar' %}
+                الحديث اليومي
+            {% else %}
+                Daily Hadith
+            {% endif %}
+        {% else %}
+            Daily Hadith الحديث اليومي
+        {% endif %}
+    </title>
+    <link rel="alternate" hreflang="en" href="{{ url_for('index') + 'en' }}" />
+    <link rel="alternate" hreflang="ar" href="{{ url_for('index') + 'ar' }}" />
     <meta charset="UTF-8" />
     <meta
       name="description"
-      content="Daily Islamic Hadith provides a new, authentic hadith each day in both Arabic and English,
+      content=
+              {% if language_page is defined and language_page == 'ar' %}
+                  "يقدم موقع الحديث الإسلامي اليومي حديثًا أصيلًا جديدًا كل يوم، مما يوفر وصولًا مباشرًا إلى تعاليم النبي محمد صلى الله عليه وسلم للتأمل والنمو الروحي. يلتزم موقعنا بتقديم الأحاديث الموثوقة من مصادر موثوقة دون تعليق إضافي، مما يجعله المنصة المثالية لأولئك الذين يسعون للحصول على إلهام يومي وارتباط أعمق بالقيم الإسلامية."
+              {% elif language_page is defined and language_page == 'en' %}
+                  "Daily Islamic Hadith provides a new, authentic hadith each day,
      offering direct access to the teachings of Prophet Muhammad (peace be upon him) for reflection and spiritual growth.
       Our site is dedicated to delivering verified hadiths from trusted sources without added commentary, making it an ideal platform for those seeking daily inspiration and a deeper connection to Islamic values."
+              {% else %}
+                  "Daily Islamic Hadith provides a new, authentic hadith each day in both Arabic and English,
+                  offering direct access to the teachings of Prophet Muhammad (peace be upon him) for reflection and spiritual growth.
+                  Our site is dedicated to delivering verified hadiths from trusted sources without added commentary, making it an ideal platform for those seeking daily inspiration and a deeper connection to Islamic values."
+              {% endif %}
     />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link
@@ -35,16 +56,20 @@
   </head>
   <body>
     <i id="displayModeBtn" class="fa-solid fa-sun" title="Switch to light mode"></i>
-    <h1>Hadith Of The Day</h1>
+    <h1> {% if language_page is defined and language_page == 'ar' %} حديث اليوم {% else %}Hadith Of The Day {% endif %}</h1>
     <div class="quote-container" role="main" aria-live="polite">
       {% if hadith is defined and hadith is not none %}
       <div class="quotes">
+        {% if language_page is not defined or language_page == 'en' %}
         <p id="hadithEnglish" class="quoteEnglish">
           {{ hadith.hadithEnglish|e }}
         </p>
+        {% endif %}
+        {% if language_page is not defined or language_page == 'ar' %}
         <p id="hadithArabic" class="quoteArabic" lang="ar">
           {{ hadith.hadithArabic|e }}
         </p>
+        {% endif %}
       </div>
       <details>
         <summary>
@@ -53,25 +78,33 @@
                 <i class="fa-solid fa-caret-down"></i> Explanation تفسير الحديث
             </div>
             {% else %}
+            {% if language_page is not defined or language_page == 'en' %}
             <div id="summary_en_title" class="quoteEnglish">
                 <i class="fa-solid fa-caret-down"></i> Explanation
             </div>
+            {% endif %}
+            {% if language_page is not defined or language_page == 'ar' %}
             <div id="summary_ar_title" class="quoteArabic">
                 <i class="fa-solid fa-caret-down"></i> تفسير الحديث
             </div>
             {% endif %}
+            {% endif %}
         </summary>
         <div class="quotes">
+          {% if language_page is not defined or language_page == 'en' %}
           <p id="exp_en" class="quoteEnglish" lang="en">
             {% if hadith.hadithExplanationEnglish is not none %} {{
             hadith.hadithExplanationEnglish|e }} {% else %} Explanation not
             found {% endif %}
           </p>
+          {% endif %}
+          {% if language_page is not defined or language_page == 'ar' %}
           <p id="exp_ar" class="quoteArabic" lang="ar">
             {% if hadith.hadithExplanationArabic is not none %} {{
             hadith.hadithExplanationArabic|e }} {% else %} لا يوجد تفسير {%
             endif %}
           </p>
+          {% endif %}
         </div>
       </details>
       {% if ua is defined and not ua.is_mobile %}

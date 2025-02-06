@@ -8,19 +8,13 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-def get_template_response(r: request, result: dict | None, home_page: bool):
-    if result.get('hadith') is not None:
-        return render_template("index.html",
-                               home_page=home_page,
-                               hadith=result.get('hadith'),
-                               ua=get_user_agent(r),
-                               copyright_year=date.today().year)
-    else:
-        return (render_template("index.html",
-                                home_page=home_page,
-                                error=result.get('error'),
-                                copyright_year=date.today().year)
-                , result.get('status_code'))
+def get_template_response(r: request, result: dict | None, render_metadata: dict):
+    return (render_template("index.html",
+                            **render_metadata,
+                            **result,
+                            ua=get_user_agent(r),
+                            copyright_year=date.today().year)
+            , result.get('status_code'))
 
 
 def handle_fetch_hadith_success(hadith: dict | None):
