@@ -2,25 +2,26 @@ from datetime import date
 from flask import render_template, request
 from hadith_app.routes.helper.request_helper import get_user_agent
 import logging
+import os
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+GOOGLE_ANALYTICS = {
+    'is_enabled': os.getenv('G_ANALYTICS_ENABLED', False),
+    'measurement_key': os.getenv('G_ANALYTICS_MEASUREMENT_KEY', 'your-measurement-key')
+}
+
 
 def get_template_response(r: request, result: dict | None, home_page: bool):
-    if result.get('hadith') is not None:
-        return render_template("index.html",
-                               home_page=home_page,
-                               hadith=result.get('hadith'),
-                               ua=get_user_agent(r),
-                               copyright_year=date.today().year)
-    else:
-        return (render_template("index.html",
-                                home_page=home_page,
-                                error=result.get('error'),
-                                copyright_year=date.today().year)
-                , result.get('status_code'))
+    return (render_template("index.html",
+                            **result,
+                            home_page=home_page,
+                            ua=get_user_agent(r),
+                            google_analytics=GOOGLE_ANALYTICS,
+                            copyright_year=date.today().year)
+            , result.get('status_code'))
 
 
 def handle_fetch_hadith_success(hadith: dict | None):

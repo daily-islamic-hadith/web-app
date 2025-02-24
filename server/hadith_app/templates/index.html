@@ -1,6 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    {% if google_analytics and google_analytics.is_enabled %}
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ google_analytics.measurement_key }}"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+        gtag('config', {{ google_analytics.measurement_key }});
+    </script>
+    {% endif %}
     <title>Daily Hadith الحديث اليومي</title>
     <meta charset="UTF-8" />
     <meta
