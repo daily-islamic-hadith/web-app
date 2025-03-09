@@ -106,7 +106,6 @@
           <i class="fa-solid fa-copy"></i>
         </button>
       </div>
-      <div id="notification">Hadith copied to clipboard!</div>
       {% endif %}
       <p id="source">
         Source: {{ hadith.bookName|e }} by {{ hadith.bookWriterName|e }}
@@ -120,7 +119,12 @@
       {% endif %}
     </div>
     {% if hadith is defined and hadith is not none %}
+    <div id="notification"></div>
     <div class="button-group">
+       <button id="shareHadith" class="btn" aria-label="Share Hadith">
+         <i class="fa-solid fa-share"></i>
+         <span>Share</span>
+       </button>
       {% if home_page is defined and home_page %}
       <button id="showNewHadith" class="btn" aria-label="Get A New Hadith">
         <i class="fa-solid fa-eye"></i>

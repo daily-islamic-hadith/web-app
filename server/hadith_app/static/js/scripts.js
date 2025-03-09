@@ -4,6 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const ar_copy_button = document.querySelector('#arCopyButton');
   const en_copy_button = document.querySelector('#enCopyButton');
   const displayBtnMode = document.querySelector('#displayModeBtn');
+  const show_new_hadith_button = document.querySelector('#showNewHadith');
+  const share_button = document.querySelector('#shareHadith');
   displayBtnMode?.addEventListener('click', function () {
     applyTheme(!document.documentElement.classList.contains('dark'));
   });
@@ -13,10 +15,9 @@ document.addEventListener('DOMContentLoaded', () => {
   en_copy_button?.addEventListener('click', function () {
     copyToClipboard('en');
   });
-  const show_new_hadith_button = document.querySelector('#showNewHadith');
-  if (show_new_hadith_button) {
-    show_new_hadith_button.addEventListener('click', fetchNewHadith);
-  }
+  show_new_hadith_button?.addEventListener('click', fetchNewHadith);
+  share_button?.addEventListener('click', shareHadithLink);
+
 });
 
 async function fetchNewHadith() {
@@ -108,18 +109,25 @@ async function copyToClipboard(lang) {
 
   try {
     await navigator.clipboard.writeText(textToCopy);
-    showNotification(lang);
+    showNotification(lang === 'en' ? 'Hadith copied to clipboard!' : '!تم نسخ الحديث');
   } catch (err) {
     console.error('Failed to copy text to clipboard:', err.message);
   }
 }
 
-function showNotification(lang) {
+async function shareHadithLink() {
+  const hadithPageUrl = window.location.origin + '/hadith/' + document.getElementById('reference').value;
+  try {
+    await navigator.clipboard.writeText(hadithPageUrl);
+    showNotification("URL copied to clipboard!");
+  } catch (err) {
+    console.error('Failed to copy text to clipboard:', err.message);
+  }
+}
+
+function showNotification(text) {
   const notification = document.getElementById('notification');
-
-  notification.textContent =
-    lang === 'en' ? 'Hadith copied to clipboard!' : '!تم نسخ الحديث';
-
+  notification.textContent = text;
   if (notification) {
     notification.classList.add('show');
     setTimeout(() => notification.classList.remove('show'), 3000);
