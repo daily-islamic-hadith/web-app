@@ -1,0 +1,2 @@
+-c ../server/requirements.lock
+pandas==3.1.0

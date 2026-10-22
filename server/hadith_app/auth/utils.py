@@ -52,7 +52,7 @@ def role_required(role):
             except ExpiredSignatureError as e:
                 raise e
             except Exception as e:
-                logger.error("Exception happened", e)
+                logger.error("Authorization failed: %s", e)
                 return jsonify(msg="Unauthorized"), 401
 
         return wrapper

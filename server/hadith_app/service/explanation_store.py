@@ -32,9 +32,17 @@ def fetch_hadith_explanation(hadith_txt):
         )
         if not ai_response or not ai_response.choices:
             return None
-        return json.loads(ai_response.choices[0].message.content)
+        choice = ai_response.choices[0]
+        if choice.finish_reason != 'stop' or choice.message.refusal or not choice.message.content:
+            return None
+        explanation = json.loads(choice.message.content)
+        if not isinstance(explanation, dict) or set(explanation) != {'en', 'ar'}:
+            return None
+        if not all(isinstance(value, str) for value in explanation.values()):
+            return None
+        return explanation
     except Exception as e:
-        logger.error(f"Failed to fetch new explanation", e)
+        logger.error("Failed to fetch new explanation: %s", e)
         return None
 
 

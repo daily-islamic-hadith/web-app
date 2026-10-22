@@ -1,6 +1,7 @@
 import argparse
 import json
 import os
+import logging
 
 from concurrent.futures import ThreadPoolExecutor
 from functools import partial
@@ -91,21 +92,29 @@ resp_f = ResponseFormatJSONSchema(
 
 
 def fetch_hadith_explanation(hadith_txt):
-    msg = '\n تفسير او شرح الحديث \n ' + hadith_txt
-    ai_response = client.chat.completions.create(
-        messages=[
-            {
-                "role": "user",
-                "content": msg
-            }
-
-        ],
-        model="gpt-4o-mini",
-        response_format=resp_f
-    )
-    if not ai_response or not ai_response.choices:
+    if hadith_txt is None or not hadith_txt.strip():
         return None
-    return json.loads(ai_response.choices[0].message.content)
+    try:
+        msg = '\n تفسير او شرح الحديث \n ' + hadith_txt
+        ai_response = client.chat.completions.create(
+            messages=[{"role": "user", "content": msg}],
+            model="gpt-4o-mini",
+            response_format=resp_f
+        )
+        if not ai_response or not ai_response.choices:
+            return None
+        choice = ai_response.choices[0]
+        if choice.finish_reason != 'stop' or choice.message.refusal or not choice.message.content:
+            return None
+        explanation = json.loads(choice.message.content)
+        if not isinstance(explanation, dict) or set(explanation) != {'en', 'ar'}:
+            return None
+        if not all(isinstance(value, str) for value in explanation.values()):
+            return None
+        return explanation
+    except Exception as error:
+        logging.error("Failed to fetch new explanation: %s", error)
+        return None
 
 
 if __name__ == "__main__":

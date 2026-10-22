@@ -7,7 +7,7 @@ from hadith_app.service.hadith_service import delete_today_hadith, generate_new_
 
 
 @app.route('/admin/api/delete-today-hadith')
-@cross_origin()
+@cross_origin(allow_private_network=False)
 @role_required('admin')
 def delete_hadith_of_the_day():
     deleted = delete_today_hadith()
@@ -18,7 +18,7 @@ def delete_hadith_of_the_day():
 
 
 @app.route('/admin/api/generate-hadith-explanation')
-@cross_origin()
+@cross_origin(allow_private_network=False)
 @role_required('admin')
 def generate_hadith_explanation():
     hadith_ref_param = request.args.get('hadith_reference')

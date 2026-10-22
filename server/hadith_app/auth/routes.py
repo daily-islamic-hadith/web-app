@@ -8,7 +8,7 @@ from .schemas import CredentialsSchema
 
 
 @auth_bp.route('/api/get-token', methods=['POST'])
-@cross_origin()
+@cross_origin(allow_private_network=False)
 def generate_access_token():
     schema = CredentialsSchema()
     errors = schema.validate(request.form)

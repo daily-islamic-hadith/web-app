@@ -31,7 +31,7 @@ def fetch_hadith(book_name, chapter_number, hadith_number):
     }
     try:
         logger.info(f"Fetching hadith: book={book_name}, chapter={chapter_number}, hadith={hadith_number}")
-        response = requests.get(API_URL, params=params)
+        response = requests.get(API_URL, params=params, timeout=(5, 30))
         response.raise_for_status()  # Raise an error for bad status codes
         hadith_data = response.json()
 
