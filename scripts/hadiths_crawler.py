@@ -45,7 +45,7 @@ def fetch_hadiths(book_name, chapter_number, hadith_status):
         'apiKey': API_KEY
     }
     try:
-        response = requests.get(BASE_ENDPOINT, params=params)
+        response = requests.get(BASE_ENDPOINT, params=params, timeout=(5, 30))
         #logging.info(response.json())
         response.raise_for_status()  # Raise an error for bad status codes
         return response.json().get('hadiths', {}).get('data', [])

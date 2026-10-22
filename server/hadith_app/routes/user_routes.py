@@ -40,7 +40,7 @@ def privacy():
 
 
 @app.route('/api/today-hadith')
-@cross_origin()
+@cross_origin(allow_private_network=False)
 def get_hadith_of_the_day():
     """
     Retrieves the hadith of the day.
@@ -54,7 +54,7 @@ def get_hadith_of_the_day():
                        If an error occurs, returns a tuple containing a JSON response with an error message
                        and the corresponding HTTP status code.
     """
-    result = _try_get_hadith(HadithFetchMode.DAILY)
+    result = _try_get_hadith(HadithFetchMode.DAILY, None)
     if result.get('hadith') is not None:
         return jsonify(result.get('hadith'))
     else:
@@ -62,9 +62,9 @@ def get_hadith_of_the_day():
 
 
 @app.route('/api/random-hadith')
-@cross_origin()
+@cross_origin(allow_private_network=False)
 def get_random_hadith():
-    result = _try_get_hadith(HadithFetchMode.RANDOM)
+    result = _try_get_hadith(HadithFetchMode.RANDOM, None)
     if result.get('hadith') is not None:
         return jsonify(result.get('hadith'))
     else:
@@ -72,7 +72,7 @@ def get_random_hadith():
 
 
 @app.route('/api/fetch-hadith')
-@cross_origin()
+@cross_origin(allow_private_network=False)
 def fetch_hadith():
     fetch_mode_param = request.args.get('fetch-mode')  # mandatory
     lang_param = request.args.get("lang")  # optional

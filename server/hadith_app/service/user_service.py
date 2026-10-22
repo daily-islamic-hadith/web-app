@@ -25,4 +25,12 @@ def validate_user_credentials(username, password):
 
 
 def validate_password(encrypted_password, password):
-    return bcrypt.check_password_hash(encrypted_password, password)
+    # bcrypt hashes only support passwords up to 72 UTF-8 bytes.
+    if not isinstance(password, str) or len(password.encode('utf-8')) > 72:
+        return False
+    if not isinstance(encrypted_password, (str, bytes)):
+        return False
+    try:
+        return bcrypt.check_password_hash(encrypted_password, password)
+    except (ValueError, TypeError):
+        return False
